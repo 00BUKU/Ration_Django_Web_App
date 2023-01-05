@@ -4,5 +4,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     # In this case '' represents the root route
-    path('', include('Ration_Django_Web_App.urls')),
+    path('', include('main_app.urls')),
 ]
