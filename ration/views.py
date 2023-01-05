@@ -15,8 +15,9 @@ def home(request):
 # def about(request):
 #  return render(request, 'about.html')
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the ration index.")
+def recipes_index(request):
+  recipes = Recipe.objects.all()
+  return render(request, 'recipes/index.html', {'recipes': recipes})
 
 def signup(request):
   error_message = ''
