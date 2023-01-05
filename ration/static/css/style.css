@@ -1,0 +1,33 @@
+body,html {
+height:100%;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+/* Remove the navbar's default margin-bottom and rounded borders */ 
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+  
+main {
+  flex: 1 0 auto;
+}
+
+body > .container {
+  padding-top: 60px;
+}
+
+/* Add a gray background color and some padding to the footer */
+footer {
+  background-color: #f2f2f2;
+  padding: 25px;
+}
+
+
+
+
+
