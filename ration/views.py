@@ -12,8 +12,8 @@ from .forms import RegisterForm
 def home(request):
   return render(request, 'home.html')
  
-# def about(request):
-#  return render(request, 'about.html')
+def about(request):
+ return render(request, 'about.html')
 
 def recipes_index(request):
   recipes = Recipe.objects.all()
