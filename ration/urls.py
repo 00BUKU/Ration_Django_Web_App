@@ -1,8 +1,13 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
+from . import views
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    # In this case '' represents the root route
-    path('', include('main_app.urls')),
+    # localhost: 8000 (the catcollector.urls is '')
+    path('', views.home, name='home'), #**kwargs, key word argument
+    # path('about/', views.about, name='about'),
+    # path('recipes/', views.recipes_index, name='index'),
+    # path('recipes/<int:recipes_id>/', views.recipes_detail, name="detail"),
+   
 ]
