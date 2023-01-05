@@ -9,6 +9,12 @@ from django.http import HttpResponse
 from .models import Recipe, Review, Profile
 from .forms import RegisterForm
 
+def home(request):
+  return render(request, 'home.html')
+ 
+# def about(request):
+#  return render(request, 'about.html')
+
 def index(request):
     return HttpResponse("Hello, world. You're at the ration index.")
 
