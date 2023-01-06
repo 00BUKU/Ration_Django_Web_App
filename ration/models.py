@@ -15,6 +15,7 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=50)
+    summary = models.TextField(max_length=500)
     directions = models.TextField()
     cooking_minutes = models.IntegerField(validators=[MinValueValidator(0)])
     preparation_minutes = models.IntegerField(validators=[MinValueValidator(0)])
@@ -29,7 +30,10 @@ class Recipe(models.Model):
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount_teaspoons = models.FloatField(validators=[MinValueValidator(0.0)])
+    amount_tablespoons = models.FloatField(validators=[MinValueValidator(0.0)])
+
+    def __str__(self):
+        return f"{self.recipe}: {self.ingredient}"
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

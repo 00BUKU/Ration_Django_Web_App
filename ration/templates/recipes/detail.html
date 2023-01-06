@@ -11,11 +11,10 @@
             </div>
             <div class="card-body">
                 <h1 class="card-title" >
-                <small class="text-muted"> {{ recipe.title }}</small>
+                <small class="text-muted">{{ recipe.title }}</small>
                 </h1>
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>Directions: {{ recipe.directions }}</li>
-                    
                 </ul>
             </div>
         </div>
@@ -26,9 +25,13 @@
             <div class="card-body">
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>Preparation time: {{ recipe.preparation_minutes }}</li>
-                    <li> Cooking time: {{ recipe.cooking_minutes }}</li>
-                    <li>Servings: {{ recipe.servings }} </li>
-                    <li>Ingresients: {{ recipe.ingredients }} </li>
+                    <li>Cooking time: {{ recipe.cooking_minutes }}</li>
+                    <li>Servings: {{ recipe.servings }}</li>
+                    <li>Ingredients: <ul>
+                    {% for ingredient in ingredients %}
+                        <li>{{ingredient.amount_tablespoons}} Tbpns: {{ ingredient.ingredient.name }}</li>
+                    {% endfor %}
+                         </ul></li>
                     <li>Created by: {{ recipe.user }}</li>
                 </ul>
                 <button type="button" class="btn btn-lg btn-block btn-outline-primary">Delete</button>
