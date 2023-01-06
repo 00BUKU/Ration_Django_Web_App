@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import DetailView
 # Create your views here.
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -43,6 +43,27 @@ def unfavorite_recipe(request, recipe_id):
   Profile.objects.get(user=request.user).favorites.remove(recipe_id)
   return redirect('detail', recipe_id=recipe_id)
 
+class RecipeCreate(CreateView):
+  model= Recipe
+  fields = '__all__'
+  def form_valid(self, form):
+      form.instance.user = self.request.user
+      return super().form_valid(form)
+
+@login_required
+def add_review(request, recipe_id):
+  form = ReviewForm(request.POST)
+
+  if form.is_valid():
+    new_review = form.save(commit=False)
+    new_review.user_id = request.user.id
+    new_review.recipe_id = recipe_id
+    new_review.save()
+  return redirect('detail', recipe_id=recipe_id)
+
+  # def delete_review():
+  
+
 def signup(request):
   error_message = ''
   if request.method == 'POST':
@@ -64,24 +85,7 @@ def signup(request):
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
 
-
-class RecipeCreate(CreateView):
-  model= Recipe
-  fields = '__all__'
-  def form_valid(self, form):
-      form.instance.user = self.request.user
-      return super().form_valid(form)
-
-@login_required
-def add_review(request, recipe_id):
-  form = ReviewForm(request.POST)
-
-  if form.is_valid():
-    new_review = form.save(commit=False)
-    new_review.user_id = request.user.id
-    new_review.recipe_id = recipe_id
-    new_review.save()
-  return redirect('detail', recipe_id=recipe_id)
-
-  # def delete_review():
-  
+def profile_detail(request, user_id):
+    profile = Profile.objects.get(user_id=user_id) 
+    context = {'profile': profile}
+    return render(request, 'registration/user_profile.html', context)
