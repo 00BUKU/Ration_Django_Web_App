@@ -7,8 +7,8 @@
 <p>Email: {{ profile.user.email }}</p>
 
 <ul>
-    {% for favorite in profile.favorites_set.all %}
-        <li><a href="{% url 'detail' favorite.recipe.id %}">{{ favorite.recipe.name }}</a></li>
+    {% for favorite in profile.favorites.all %}
+        <li><a href="{% url 'detail' favorite.id %}">{{ favorite.title }}</a></li>
     {% empty %}
       <div class="notification space-below">
         No favorites.
