@@ -11,5 +11,6 @@ urlpatterns = [
     path('recipes/<int:recipe_id>/unfavorite', views.unfavorite_recipe, name="unfavorite_recipe"),
     path('accounts/signup', views.signup, name='signup'),
     path('recipes/<int:recipe_id>/add_review', views.add_review, name='add_review'),
-    path('recipes/create/', views.RecipeCreate.as_view(), name='recipe_create')
+    path('recipes/create/', views.RecipeCreate.as_view(), name='recipe_create'),
+    path('members/<int:user_id>/profile', views.profile_detail, name='profile_detail')
 ]

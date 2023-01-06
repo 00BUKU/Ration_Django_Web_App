@@ -41,7 +41,7 @@
                         <li>{{ingredient.amount_tablespoons}} Tbpns: {{ ingredient.ingredient.name }}</li>
                     {% endfor %}
                          </ul></li>
-                    <li>Created by: {{ recipe.user }}</li>
+                    <li>Created by: <a href="{% url 'profile_detail' recipe.user.id %}">{{ recipe.user }}</a></li>
                 </ul>
                 <button type="button" class="btn btn-lg btn-block btn-outline-primary">Delete</button>
             </div>
@@ -62,7 +62,7 @@
             {{ review.comment }}
         </br>
        <strong> Reviewer: </strong>
-            {{ review.user }}
+            <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}/</a>
         </p>
         
     </div>
