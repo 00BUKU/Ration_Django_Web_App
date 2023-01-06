@@ -22,11 +22,11 @@ def recipes_index(request):
 
 def recipes_detail(request, recipe_id):
   recipe = Recipe.objects.get(id=recipe_id)
-  
+  reviews = Review.objects.filter(recipe_id=recipe_id)
   #Add a review
   review_form = ReviewForm()
   
-  return render(request, 'recipes/detail.html', {'recipe': recipe, 'review_form': review_form})
+  return render(request, 'recipes/detail.html', {'recipe': recipe, 'reviews': reviews, 'review_form': review_form})
 
 def signup(request):
   error_message = ''
@@ -47,11 +47,15 @@ def signup(request):
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
 
+@login_required
 def add_review(request, recipe_id):
   form = ReviewForm(request.POST)
 
   if form.is_valid():
     new_review = form.save(commit=False)
+    new_review.user_id = request.user.id
     new_review.recipe_id = recipe_id
     new_review.save()
-    return redirect('detail', recipe_id=recipe_id)
+  return redirect('detail', recipe_id=recipe_id)
+
+  # def delete_review():

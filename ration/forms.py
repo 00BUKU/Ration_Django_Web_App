@@ -11,4 +11,4 @@ class RegisterForm(UserCreationForm):
 class ReviewForm(ModelForm):
     class Meta:
         model = Review
-        fields = ['rating', 'comment', 'user']
+        fields = ['rating', 'comment']

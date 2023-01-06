@@ -40,7 +40,7 @@
 <hr>
 <h2 class="subtitle">Reviews</h2>
 <div class="reviews-wrapper">
- {% for review in review.all %}
+ {% for review in reviews %}
     <div class=" notification space-below">
         <p>
             <strong> Date: </strong> {{ review.date_added|date:"Y-m-d"}},
@@ -48,22 +48,24 @@
         </p>
         <p>
             {{ review.comment }}
-
+        </br>
+       <strong> Reviewer: </strong>
+            {{ review.user }}
         </p>
         
     </div>
   {% empty %}
       <div class="notification space-below">
-        Nop reviews yet...
+        No reviews yet...
       </div>
   {% endfor %}
   </div>
 
   <div class="notification space-below">
     {% if request.user.is_authenticated  %}
-    <form method="post" action=".">
+    <form method="post" action="{% url 'add_review' recipe.id %}">
              {% csrf_token %}
-             <!-- {{ review_form.as_p }} -->
+          
             <div  class="control">
                 <div class="select">
                     <select  name="rating">
@@ -78,7 +80,7 @@
         </div>
 
         <div class="field">
-            <label>Conmment</label>
+            <label>Comment</label>
             <div class="control">
                 <textarea class="textarea" name="comment"> </textarea>
             </div>
