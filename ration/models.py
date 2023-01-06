@@ -15,6 +15,7 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=50)
+    summary = models.TextField(max_length=500)
     directions = models.TextField()
     cooking_minutes = models.IntegerField(validators=[MinValueValidator(0)])
     preparation_minutes = models.IntegerField(validators=[MinValueValidator(0)])
