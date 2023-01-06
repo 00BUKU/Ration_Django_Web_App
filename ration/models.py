@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 from django.urls import reverse 
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -48,3 +49,6 @@ class Review(models.Model):
     comment = models.TextField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    
