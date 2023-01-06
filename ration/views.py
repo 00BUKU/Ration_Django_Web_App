@@ -34,6 +34,8 @@ def signup(request):
     if form.is_valid():
       # This will add the user to the database
       user = form.save()
+      profile = Profile(user=user)
+      profile.save()
       # This is how we log a user in via code
       login(request, user)
       return redirect('index')
