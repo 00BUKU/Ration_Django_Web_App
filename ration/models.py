@@ -27,6 +27,9 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+      return reverse('detail', kwargs={'recipe_id': self.id})
     
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
