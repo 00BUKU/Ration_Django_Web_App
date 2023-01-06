@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import HttpResponse
-from .models import Recipe, Review, Profile
+from .models import Recipe, Review, Profile, Amount
 from .forms import RegisterForm
 from .forms import ReviewForm
 
