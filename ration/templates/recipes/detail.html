@@ -27,7 +27,11 @@
                     <li>Preparation time: {{ recipe.preparation_minutes }}</li>
                     <li>Cooking time: {{ recipe.cooking_minutes }}</li>
                     <li>Servings: {{ recipe.servings }}</li>
-                    <li>Ingredients: {{ recipe.ingredients }}</li>
+                    <li>Ingredients: <ul>
+                    {% for ingredient in ingredients %}
+                        <li>{{ingredient.amount_tablespoons}} Tbpns: {{ ingredient.ingredient.name }}</li>
+                    {% endfor %}
+                         </ul></li>
                     <li>Created by: {{ recipe.user }}</li>
                 </ul>
                 <button type="button" class="btn btn-lg btn-block btn-outline-primary">Delete</button>

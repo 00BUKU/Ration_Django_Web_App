@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import HttpResponse
-from .models import Recipe, Review, Profile
+from .models import Recipe, Review, Profile, Amount
 from .forms import RegisterForm
 
 def home(request):
@@ -21,7 +21,8 @@ def recipes_index(request):
 
 def recipes_detail(request, recipe_id):
   recipe = Recipe.objects.get(id=recipe_id)
-  return render(request, 'recipes/detail.html', {'recipe': recipe})
+  ingredients = Amount.objects.filter(recipe_id=recipe_id)
+  return render(request, 'recipes/detail.html', {'recipe': recipe, 'ingredients': ingredients})
 
 def signup(request):
   error_message = ''
