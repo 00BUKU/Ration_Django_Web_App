@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 from django.urls import reverse 
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -43,8 +44,14 @@ class Profile(models.Model):
     image = models.ImageField(upload_to=None)
     favorites = models.ManyToManyField(Recipe)
 
+    def __str__(self):
+        return self.user.username
+
 class Review(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    
