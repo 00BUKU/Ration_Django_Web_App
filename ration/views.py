@@ -22,11 +22,8 @@ def recipes_index(request):
 
 def recipes_detail(request, recipe_id):
   recipe = Recipe.objects.get(id=recipe_id)
-  reviews = Review.objects.filter(recipe_id=recipe_id)
-  #Add a review
-  review_form = ReviewForm()
-  
-  return render(request, 'recipes/detail.html', {'recipe': recipe, 'reviews': reviews, 'review_form': review_form})
+  ingredients = Amount.objects.filter(recipe_id=recipe_id)
+  return render(request, 'recipes/detail.html', {'recipe': recipe, 'ingredients': ingredients})
 
 def signup(request):
   error_message = ''
