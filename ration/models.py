@@ -30,7 +30,7 @@ class Recipe(models.Model):
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount_teaspoons = models.FloatField(validators=[MinValueValidator(0.0)])
+    amount_tablespoons = models.FloatField(validators=[MinValueValidator(0.0)])
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
