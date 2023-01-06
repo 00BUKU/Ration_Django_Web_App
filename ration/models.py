@@ -40,6 +40,9 @@ class Profile(models.Model):
     image = models.ImageField(upload_to=None)
     favorites = models.ManyToManyField(Recipe)
 
+    def __str__(self):
+        return self.user.username
+
 class Review(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField(max_length=250)

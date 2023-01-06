@@ -22,7 +22,23 @@ def recipes_index(request):
 def recipes_detail(request, recipe_id):
   recipe = Recipe.objects.get(id=recipe_id)
   ingredients = Amount.objects.filter(recipe_id=recipe_id)
-  return render(request, 'recipes/detail.html', {'recipe': recipe, 'ingredients': ingredients})
+  is_favorited = False
+  try:
+    Profile.objects.get(user=request.user).favorites.get(id=recipe_id)
+    is_favorited = True
+  except:
+    pass
+  return render(request, 'recipes/detail.html', {'recipe': recipe, 'ingredients': ingredients, 'is_favorited': is_favorited})
+
+@login_required
+def favorite_recipe(request, recipe_id):
+  Profile.objects.get(user=request.user).favorites.add(recipe_id)
+  return redirect('detail', recipe_id=recipe_id)
+
+@login_required
+def unfavorite_recipe(request, recipe_id):
+  Profile.objects.get(user=request.user).favorites.remove(recipe_id)
+  return redirect('detail', recipe_id=recipe_id)
 
 def signup(request):
   error_message = ''
