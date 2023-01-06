@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import HttpResponse
 from .models import Recipe, Review, Profile, Amount
+
 from .forms import RegisterForm, ReviewForm
 
 def home(request):
@@ -62,3 +63,16 @@ def signup(request):
   form = RegisterForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
+
+@login_required
+def add_review(request, recipe_id):
+  form = ReviewForm(request.POST)
+
+  if form.is_valid():
+    new_review = form.save(commit=False)
+    new_review.user_id = request.user.id
+    new_review.recipe_id = recipe_id
+    new_review.save()
+  return redirect('detail', recipe_id=recipe_id)
+
+  # def delete_review():
