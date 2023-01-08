@@ -36,6 +36,10 @@ def recipes_detail(request, recipe_id):
     pass
   return render(request, 'recipes/detail.html', {'recipe': recipe, 'average_rating': average_rating, 'nutrition': nutrition, 'ingredients': ingredients, 'reviews': reviews, 'review_form': review_form, 'is_reviewed': is_reviewed, 'is_favorited': is_favorited})
 
+def recipes_search(request):
+  context = {}
+  return render(request, 'recipes/search.html', context)
+
 @login_required
 def favorite_recipe(request, recipe_id):
   Profile.objects.get(user=request.user).favorites.add(recipe_id)
