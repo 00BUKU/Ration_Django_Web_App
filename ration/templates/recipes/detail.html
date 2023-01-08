@@ -56,7 +56,11 @@
     <div class=" notification space-below">
         <p>
             <strong> Date: </strong> {{ review.date_added|date:"Y-m-d"}},
-            <strong> Rating: </strong> {{ review.rating }}
+            <span class="fa fa-star{% if review.rating < 1 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if review.rating < 2 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if review.rating < 3 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if review.rating < 4 %}-o {% endif %}" ></span>
+            <span class="fa fa-star{% if review.rating < 5 %}-o {% endif %}"></span>
         </p>
         <p>
             {{ review.comment }}
