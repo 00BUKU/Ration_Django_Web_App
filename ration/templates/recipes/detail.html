@@ -55,7 +55,7 @@
 </div>
 <hr>
 <div class="notification space-below">
-  {% if request.user.is_authenticated  %}
+  {% if request.user.is_authenticated and not is_reviewed %}
   <form method="post" action="{% url 'add_review' recipe.id %}">
            {% csrf_token %}
 
@@ -85,8 +85,10 @@
           </div>
       </div>
   </form>
-  {%  else %}
-      <p> Please sign in to add review! </p>
+  {%  elif is_reviewed %}
+        <p> You have already reviewed this recipe. </p>
+  {% else %}
+        <p> Please sign in to add review! </p>
   {% endif%}
 <hr>
 <h2 class="subtitle">Reviews</h2>
