@@ -22,6 +22,8 @@ def recipes_index(request):
 
 def recipes_detail(request, recipe_id):
   recipe = Recipe.objects.get(id=recipe_id)
+  average_rating = recipe.average_rating
+  nutrition = recipe.calculate_nutrition
   ingredients = Amount.objects.filter(recipe_id=recipe_id)
   review_form = ReviewForm()
   reviews = Review.objects.filter(recipe_id=recipe_id)
@@ -31,7 +33,7 @@ def recipes_detail(request, recipe_id):
     is_favorited = True
   except:
     pass
-  return render(request, 'recipes/detail.html', {'recipe': recipe, 'ingredients': ingredients, 'reviews': reviews, 'review_form': review_form, 'is_favorited': is_favorited})
+  return render(request, 'recipes/detail.html', {'recipe': recipe, 'average_rating': average_rating, 'nutrition': nutrition, 'ingredients': ingredients, 'reviews': reviews, 'review_form': review_form, 'is_favorited': is_favorited})
 
 @login_required
 def favorite_recipe(request, recipe_id):

@@ -26,14 +26,26 @@ class Recipe(models.Model):
     ingredient = models.ManyToManyField(Ingredient, through='Amount')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
+    def average_rating(self) -> float:
+        return Review.objects.filter(recipe=self).aggregate(Avg("rating"))["rating__avg"] or 0
+
+    def calculate_nutrition(self):
+        nutrient = {}
+        for ingredient in Amount.objects.filter(recipe=self):
+            for key, value in ingredient.ingredient.__dict__:
+                if type(value) == float:
+                    previous_amount = nutrient.get(key, 0)
+                    nutrient[key] = previous_amount + value*ingredient.amount_tablespoons
+        return nutrient
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-      return reverse('detail', kwargs={'recipe_id': self.id})
+        return reverse('detail', kwargs={'recipe_id': self.id})
 
-    def average_rating(self) -> float:
-        return Review.objects.filter(recipe=self).aggregate(Avg("rating"))["rating_avg"] or 0
+
+        
     
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

@@ -22,8 +22,13 @@
                 {% endif %}
                     
                 </h1>
+                <h2><span class="fa fa-star{% if average_rating < 1 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if average_rating < 2 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if average_rating < 3 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if average_rating < 4 %}-o {% endif %}" ></span>
+            <span class="fa fa-star{% if average_rating < 5 %}-o {% endif %}"></span></h2>
                 <ul class="list-unstyled mt-3 mb-4">
-                    <li>Directions: {{ recipe.directions }}</li>
+                    <li>Directions: {{ recipe.directions }} {{ average_rating }}</li>
                 </ul>
             </div>
         </div>
