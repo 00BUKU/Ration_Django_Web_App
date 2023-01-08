@@ -4,7 +4,7 @@ from django.views.generic import DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
 from .models import Recipe, Review, Profile, Amount
 
@@ -63,7 +63,14 @@ def add_review(request, recipe_id):
     new_review.save()
   return redirect('detail', recipe_id=recipe_id)
 
-  # def delete_review():
+
+class ReviewUpdate(UpdateView):
+  model = Review
+  fields = ['rating', 'comment']
+
+class ReviewDelete(DeleteView):
+  model = Review
+  sucess_url = '/recipes/recipe_id/'
   
 
 def signup(request):
