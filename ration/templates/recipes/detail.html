@@ -53,7 +53,41 @@
         </div>
     </div>
 </div>
+<hr>
+<div class="notification space-below">
+  {% if request.user.is_authenticated  %}
+  <form method="post" action="{% url 'add_review' recipe.id %}">
+           {% csrf_token %}
 
+          <h3>Leave a review: </h3>
+          <div  class="control">
+              <div class="select">
+                  <div>Rating: </div>
+                  <select  name="rating">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3" selected>3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                  </select>
+              </div>
+          </div>
+      </div>
+      <div class="field">
+          <label>Comment</label>
+          <div class="control">
+              <textarea class="textarea" name="comment"> </textarea>
+          </div>
+      </div>
+      <div class="field">
+          <div class="control">
+              <button class="button is-success">Submit</button>
+          </div>
+      </div>
+  </form>
+  {%  else %}
+      <p> Please sign in to add review! </p>
+  {% endif%}
 <hr>
 <h2 class="subtitle">Reviews</h2>
 <div class="reviews-wrapper">
@@ -73,6 +107,8 @@
        <strong> Reviewer: </strong>
             <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}/</a>
         </p>
+        <a href="{% url 'reviews_update' review.pk %}"> Edit</a>
+        <a href="{% url 'reviews_delete' review.pk %}">     Delete</a>
         
     </div>
   {% empty %}
@@ -81,42 +117,7 @@
       </div>
   {% endfor %}
   </div>
-
-  <div class="notification space-below">
-    {% if request.user.is_authenticated  %}
-    <form method="post" action="{% url 'add_review' recipe.id %}">
-             {% csrf_token %}
-          
-            <div  class="control">
-                <div class="select">
-                    <select  name="rating">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="field">
-            <label>Comment</label>
-            <div class="control">
-                <textarea class="textarea" name="comment"> </textarea>
-            </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-success">Submit</button>
-            </div>
-        </div>
-    </form>
-    {%  else %}
-        <p> Please sign in to add review! </p>
-    {% endif%}
+        
   </div>
 </div>
-
-
 {% endblock %}
