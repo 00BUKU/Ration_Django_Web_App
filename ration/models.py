@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg
 from datetime import date
 from django.urls import reverse 
 from django.contrib.auth.models import User
@@ -30,6 +31,9 @@ class Recipe(models.Model):
 
     def get_absolute_url(self):
       return reverse('detail', kwargs={'recipe_id': self.id})
+
+    def average_rating(self) -> float:
+        return Review.objects.filter(recipe=self).aggregate(Avg("rating"))["rating_avg"] or 0
     
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
