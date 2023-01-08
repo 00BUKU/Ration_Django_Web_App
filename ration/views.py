@@ -70,7 +70,7 @@ class ReviewUpdate(UpdateView):
 
 class ReviewDelete(DeleteView):
   model = Review
-  sucess_url = '/recipes/recipe_id/'
+  sucess_url = '/recipes/'
   
 
 def signup(request):
