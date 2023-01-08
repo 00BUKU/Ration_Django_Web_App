@@ -27,13 +27,14 @@ def recipes_detail(request, recipe_id):
   ingredients = Amount.objects.filter(recipe_id=recipe_id)
   review_form = ReviewForm()
   reviews = Review.objects.filter(recipe_id=recipe_id)
+  is_reviewed = Review.objects.filter(recipe_id=recipe_id, user=request.user).exists()
   is_favorited = False
   try:
     Profile.objects.get(user=request.user).favorites.get(id=recipe_id)
     is_favorited = True
   except:
     pass
-  return render(request, 'recipes/detail.html', {'recipe': recipe, 'average_rating': average_rating, 'nutrition': nutrition, 'ingredients': ingredients, 'reviews': reviews, 'review_form': review_form, 'is_favorited': is_favorited})
+  return render(request, 'recipes/detail.html', {'recipe': recipe, 'average_rating': average_rating, 'nutrition': nutrition, 'ingredients': ingredients, 'reviews': reviews, 'review_form': review_form, 'is_reviewed': is_reviewed, 'is_favorited': is_favorited})
 
 @login_required
 def favorite_recipe(request, recipe_id):

@@ -70,4 +70,7 @@ class Review(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
 
+    constraints = [
+        models.UniqueConstraint(fields=['recipe', 'user'], name='unique_review_per_user')
+    ]
     
