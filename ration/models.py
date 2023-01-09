@@ -32,7 +32,7 @@ class Recipe(models.Model):
     def calculate_nutrition(self):
         nutrient = {}
         for ingredient in Amount.objects.filter(recipe=self):
-            for key, value in ingredient.ingredient.__dict__:
+            for key, value in ingredient.ingredient.__dict__.items():
                 if type(value) == float:
                     previous_amount = nutrient.get(key, 0)
                     nutrient[key] = previous_amount + value*ingredient.amount_tablespoons
