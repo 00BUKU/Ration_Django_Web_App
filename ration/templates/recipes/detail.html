@@ -7,13 +7,14 @@
         <div class="card mb-4 box-shadow">
             <div class="card-header">
                 <p>{{ recipe.image }}</p>
-                <img src="{{ recipe.image }}">
+                <img src="{{ recipe.image }}"><br>
+                
                 <h4 class="my-0 font-weight-normal"></h4>
             </div>
             <div class="card-body">
                 <h1 class="card-title" >
                 <small class="text-muted">{{ recipe.title }}</small>
-                
+            
                 {% if user.is_authenticated %}
                     {% if is_favorited %}
                         <a href="{% url 'unfavorite_recipe' recipe.id %}"><i class="fa fa-star"></i></a>
@@ -29,6 +30,7 @@
             <span class="fa fa-star{% if recipe.average_rating < 4 %}-o {% endif %}" ></span>
             <span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h2>
                 <ul class="list-unstyled mt-3 mb-4">
+                    <li> Date added: {{ recipe.date_added|date:"Y-m-d"}}</li> <br>
                     <li>Directions: {{ recipe.directions }} {{ average_rating }}</li>
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>Preparation time: {{ recipe.preparation_minutes }}</li>
@@ -41,7 +43,14 @@
                          </ul></li>
                     <li>Created by: <a href="{% url 'profile_detail' recipe.user.id %}">{{ recipe.user }}</a></li>
                 </ul>
-                <button type="button" class="btn btn-lg btn-block btn-outline-primary">Delete</button>
+                {% if request.user.is_authenticated %}
+                <form action ="{% url 'delete_recipe' recipe.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn" value="Delete">Delete recipe</button>
+                </form>
+                {% else %}
+                <p> You didn't create this recipe, so can't edit it! </p>
+                {% endif%}
             </div>
         </div>
     </div>

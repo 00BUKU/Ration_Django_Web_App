@@ -9,8 +9,9 @@
 <div class="card">
 	<a href="{% url 'detail' recipe.id %}">
 		<div class="card-content">
-			<span class="card-title">{{ recipe.title }}</span>
+			<h3> <span class="card-title">{{ recipe.title }}</span></h3>
             <p>Image: {{ recipe.image }}</p>
+			<p><strong> Date: </strong> {{ recipe.date_added|date:"Y-m-d"}}</p>
 			<p>Time: {{ recipe.cooking_minutes|add:recipe.preparation_minutes }}</p>
 		</div>
 	</a>

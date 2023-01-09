@@ -74,6 +74,13 @@ def recipe_create(request):
     ingredients = Ingredient.objects.all()
     return render(request, 'recipes/create.html', { 'form': form, 'ingredients': ingredients })
 
+def delete_recipe(request, recipe_id):
+  recipe=Recipe.objects.get(id=recipe_id)
+  if recipe.user_id == request.user.id:
+    recipe.delete()
+  return redirect('index')
+
+
 @login_required
 def add_review(request, recipe_id):
   form = ReviewForm(request.POST)
@@ -84,14 +91,6 @@ def add_review(request, recipe_id):
     new_review.recipe_id = recipe_id
     new_review.save()
   return redirect('detail', recipe_id=recipe_id)
-
-# class ReviewUpdate(UpdateView):
-#   model = Review
-#   fields = ['rating', 'comment']
-
-# class ReviewDelete(DeleteView):
-#   model = Review
-#   sucess_url = '/recipes/'
   
 def remove_review(request, review_id, recipe_id):
   
