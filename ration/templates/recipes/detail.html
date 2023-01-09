@@ -54,8 +54,18 @@
             <div class="card-body">
 <!-- here goes the nutritional info/ graphs -->
                 
-                {{ recipe.calculate_nutrition }}
-                    
+                <table class="table">
+                    <tbody>
+                        {% for nutrient, value in recipe.calculate_nutrition.items %}
+                            <tr>
+                                <th scope="row">{{ nutrient.capitalize }}</th>
+                                <td>{{ value|floatformat:2 }}</td>
+                            </tr> 
+                        {% empty %}
+                        No nutritional information available
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
