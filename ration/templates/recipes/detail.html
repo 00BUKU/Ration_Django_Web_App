@@ -126,12 +126,19 @@
             {{ review.comment }}
         </br>
        <strong> Reviewer: </strong>
-            <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}/</a>
+            <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}</a>
         </p>
-        <a href="{% url 'reviews_update' review.pk %}"> Edit</a>
-        <a href="{% url 'reviews_delete' review.pk %}">     Delete</a>
+        {% if request.user.is_authenticated %}
         
+        <form action ="{% url 'remove_review' recipe.id review.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn" value="Delete">Delete</button>
+        </form>
+        {% else %}
+        <p> You didn't add a review! You need to signup to add and edit a review! </p>
+        {% endif%}
     </div>
+
   {% empty %}
       <div class="notification space-below">
         No reviews yet...
