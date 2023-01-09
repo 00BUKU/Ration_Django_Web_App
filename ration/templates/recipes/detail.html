@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load ration_extras %}
 {% block content %}
 
 <div class="container">
@@ -53,7 +54,8 @@
             </div>
             <div class="card-body">
 <!-- here goes the nutritional info/ graphs -->
-                
+                <canvas id="myChart" width="400" height="100"></canvas> 
+                <br /> 
                 <table class="table">
                     <tbody>
                         {% for nutrient, value in recipe.calculate_nutrition.items %}
@@ -139,4 +141,47 @@
         
   </div>
 </div>
+<script>
+// jquery function
+    $(document).ready(() => {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['carbohydrate', 'fat', 'protein'],
+                datasets: [{
+                    labels: 'Nutrients',
+                    data: [Math.round(({{recipe.calculate_nutrition|get_item:"carbohydrate"}} + Number.EPSILON) * 100)/ 100, 
+                        Math.round(({{recipe.calculate_nutrition|get_item:"fat"}} + Number.EPSILON) * 100)/ 100, 
+                        Math.round(({{recipe.calculate_nutrition|get_item:"protein"}} + Number.EPSILON) * 100)/ 100,],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)', 
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                rotation: (0.5 * Math.PI)
+            }
+        })
+    });
+</script>
 {% endblock %}
