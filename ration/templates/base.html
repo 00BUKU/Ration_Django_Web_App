@@ -35,8 +35,9 @@
           {% endif %}
             </ul>
           </ul>
-            <form class="form-inline my-2 my-lg-0">
-              <input type="search" class="form-control mr-sm-2" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'recipes_search' %}">
+              {% csrf_token %}
+              <input type="search" class="form-control mr-sm-2" aria-label="Search" name="search">
               <button class="btn btn-outline-secondary" type="submit">Search</button>
             </form>
     </div>

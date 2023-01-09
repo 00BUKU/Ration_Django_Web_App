@@ -37,8 +37,14 @@ def recipes_detail(request, recipe_id):
   return render(request, 'recipes/detail.html', {'recipe': recipe, 'average_rating': average_rating, 'nutrition': nutrition, 'ingredients': ingredients, 'reviews': reviews, 'review_form': review_form, 'is_reviewed': is_reviewed, 'is_favorited': is_favorited})
 
 def recipes_search(request):
-  context = {}
-  return render(request, 'recipes/search.html', context)
+  if request.method == "POST":
+    searched = request.POST['search']
+    recipes = Recipe.objects.filter(title__icontains=searched)
+    context = {'searched': searched, 'recipes': recipes}
+    return render(request, 'recipes/search.html', context)
+  else: 
+    context = {}
+    return render(request, 'recipes/search.html', context)
 
 @login_required
 def favorite_recipe(request, recipe_id):
