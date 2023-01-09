@@ -2,31 +2,33 @@
 
 {% block content %}
 
-<div class="jumbotron">
-    <div class="container text-center">
+<div id="home-message">
+    <div class="container-fluid text-center">
       <h1>Good health starts with what you eat</h1>      
-      <p>Want to eat mindfully? Find healthy and nutricius recipes for your everyday </p>
-    </div>
-  </div>
+      <p>Want to eat mindfully? Find healthy and nutricius recipes for your everyday </p><br><br>
+      <button type="button" class="btn btn-primary" href="{% url 'recipe_create' %}">Add a recipe</button>
+    <button type="button" class="btn btn-outline-primary" href="{% url 'index' %}">Recipe List</button>
+    </div><br><br><br>
+</div>
 
   <div class="container-fluid bg-3 text-center">    
     <h3>The favorites</h3><br>
     <div class="row">
       <div class="col-sm-3">
         <p>Some text..</p>
-        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+        <img src="" class="img-responsive" style="width:100%" alt="Image">
       </div>
       <div class="col-sm-3"> 
         <p>Some text..</p>
-        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+        <img src="" class="img-responsive" style="width:100%" alt="Image">
       </div>
       <div class="col-sm-3"> 
         <p>Some text..</p>
-        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+        <img src="" class="img-responsive" style="width:100%" alt="Image">
       </div>
       <div class="col-sm-3">
         <p>Some text..</p>
-        <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+        <img src="" class="img-responsive" style="width:100%" alt="Image">
       </div>
     </div>
   </div><br>
