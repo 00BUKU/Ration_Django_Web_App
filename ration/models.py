@@ -17,6 +17,9 @@ class Ingredient(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 class Recipe(models.Model):
     title = models.CharField(max_length=50)
     summary = models.TextField(max_length=500)

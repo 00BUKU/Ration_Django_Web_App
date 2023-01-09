@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
-from .models import Recipe, Review, Profile, Amount
+from .models import Recipe, Review, Profile, Amount, Ingredient
 
 from .forms import RegisterForm, ReviewForm, CreateRecipeForm
 
@@ -25,7 +25,9 @@ def recipes_detail(request, recipe_id):
   ingredients = Amount.objects.filter(recipe_id=recipe_id)
   review_form = ReviewForm()
   reviews = Review.objects.filter(recipe_id=recipe_id)
-  is_reviewed = Review.objects.filter(recipe_id=recipe_id, user=request.user).exists()
+  is_reviewed = True
+  if request.user.is_authenticated:
+    is_reviewed = Review.objects.filter(recipe_id=recipe_id, user=request.user).exists()
   is_favorited = False
   try:
     Profile.objects.get(user=request.user).favorites.get(id=recipe_id)
@@ -69,7 +71,8 @@ def recipe_create(request):
       return redirect('recipe_create')
   else:
     form = CreateRecipeForm()
-    return render(request, 'recipes/create.html', {'form': form})
+    ingredients = Ingredient.objects.all()
+    return render(request, 'recipes/create.html', { 'form': form, 'ingredients': ingredients })
 
 @login_required
 def add_review(request, recipe_id):
