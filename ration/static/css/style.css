@@ -33,3 +33,6 @@ footer {
   margin-bottom: 20px;
 }
 
+#home-message {
+  position:relative;
+}
