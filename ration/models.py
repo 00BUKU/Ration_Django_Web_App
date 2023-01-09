@@ -3,6 +3,8 @@ from django.db.models import Avg
 from datetime import date
 from django.urls import reverse 
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
+from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Ingredient(models.Model):
@@ -45,9 +47,6 @@ class Recipe(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'recipe_id': self.id})
-
-
-        
     
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

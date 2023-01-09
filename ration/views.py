@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
 from .models import Recipe, Review, Profile, Amount
 
-from .forms import RegisterForm, ReviewForm
+from .forms import RegisterForm, ReviewForm, CreateRecipeForm
 
 def home(request):
   return render(request, 'home.html')
@@ -54,12 +54,22 @@ def unfavorite_recipe(request, recipe_id):
   Profile.objects.get(user=request.user).favorites.remove(recipe_id)
   return redirect('detail', recipe_id=recipe_id)
 
-class RecipeCreate(CreateView):
-  model= Recipe
-  fields = '__all__'
-  def form_valid(self, form):
-      form.instance.user = self.request.user
-      return super().form_valid(form)
+@login_required
+def recipe_create(request):
+  if request.method == "POST":
+    form = CreateRecipeForm(request.POST, request.FILES)
+    if form.is_valid():
+      new_recipe = Recipe()
+      for key, value in form.cleaned_data.items():
+        setattr(new_recipe, key, value)
+      new_recipe.user_id = request.user.id
+      new_recipe.save()
+      return redirect('detail', recipe_id=new_recipe.id)
+    else:
+      return redirect('recipe_create')
+  else:
+    form = CreateRecipeForm()
+    return render(request, 'recipes/create.html', {'form': form})
 
 @login_required
 def add_review(request, recipe_id):
