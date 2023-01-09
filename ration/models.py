@@ -36,6 +36,8 @@ class Recipe(models.Model):
                 if type(value) == float:
                     previous_amount = nutrient.get(key, 0)
                     nutrient[key] = previous_amount + value*ingredient.amount_tablespoons
+        for key in nutrient:
+            nutrient[key] /= self.servings 
         return nutrient
 
     def __str__(self):
