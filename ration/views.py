@@ -93,8 +93,29 @@ def recipe_create(request):
       return redirect('recipe_create')
   else:
     form = CreateRecipeForm()
-    ingredients = Ingredient.objects.all()
-    return render(request, 'recipes/create.html', { 'form': form, 'ingredients': ingredients })
+    ingredient_list = Ingredient.objects.all()
+    return render(request, 'recipes/create.html', { 'form': form, 'ingredient_list': ingredient_list })
+
+@login_required
+def recipe_update(request, recipe_id):
+  if request.method == "POST":
+    pass
+  else:
+    recipe = Recipe.objects.get(id=recipe_id)
+    data = {
+      "title": recipe.title,
+      "summary": recipe.summary,
+      "directions": recipe.directions,
+      "cooking_minutes": recipe.cooking_minutes,
+      "preparation_minutes": recipe.preparation_minutes,
+      "image": recipe.image,
+      "servings": recipe.servings,
+    }
+    form = CreateRecipeForm(initial=data)
+    ingredients = Amount.objects.filter(recipe_id=recipe_id)
+    ingredient_list = Ingredient.objects.exclude(id__in = ingredients.values_list('ingredient_id'))
+  context = {'recipe': recipe, 'form': form, 'ingredients': ingredients, 'ingredient_list': ingredient_list }
+  return render(request, 'recipes/create.html', context)
 
 @login_required
 def add_review(request, recipe_id):

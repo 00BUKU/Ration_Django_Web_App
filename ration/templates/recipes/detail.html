@@ -41,7 +41,11 @@
                          </ul></li>
                     <li>Created by: <a href="{% url 'profile_detail' recipe.user.id %}">{{ recipe.user }}</a></li>
                 </ul>
-                <button type="button" class="btn btn-lg btn-block btn-outline-primary">Delete</button>
+                
+                {% if recipe.user == user %}
+                    <a href="{% url 'update' recipe.id %}"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Edit</button></a>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Delete</button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -128,8 +132,7 @@
        <strong> Reviewer: </strong>
             <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}</a>
         </p>
-        {% if request.user.is_authenticated %}
-        
+        {% if request.user.is_authenticated %} 
         <form action ="{% url 'remove_review' recipe.id review.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" class="btn" value="Delete">Delete</button>

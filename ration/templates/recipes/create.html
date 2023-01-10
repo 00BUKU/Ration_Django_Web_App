@@ -4,8 +4,8 @@
 {% block content %}
 
 
-{% if object %}
-	<h1>Edit <span class="teal-text">{{ object.name }}</span></h1>
+{% if recipe %}
+	<h1>Edit <span class="teal-text">{{ recipe.name }}</span></h1>
 {% else %}
 	<h1>Add Recipe</h1>
 {% endif %}
@@ -22,7 +22,22 @@
 					<th class="th-sm">Amount</th>
 				</tr>
 			</thead>
-			<tbody></tbody>
+			<tbody>
+				
+				
+				{% for ingredient in ingredients %}
+				<tr data-id="{{ ingredient.ingredient.id }}">
+					<td class="name">
+						<button class="removeIngredient" type="button">X</button> <span>{{ ingredient.ingredient.name }}</span>
+					</td>
+					<td>
+						<input type="number" step="0.01" name="amount-{{ ingredient.ingredient.id }}" value="{{ ingredient.amount_tablespoons }}" min="0" required="">
+					</td>
+				</tr>	
+				{% endfor %}
+					
+				
+			</tbody>
 		</table>
 		<table id="ingredient-options" class="table table-hover table-striped table-bordered table-sm" cellspacing="0"
 		width="100%">
@@ -34,7 +49,7 @@
 		</thead>
 		<tbody>
 			
-			{% for ingredient in ingredients %}
+			{% for ingredient in ingredient_list %}
 				<tr class = "addIngredient" data-id="{{ ingredient.id }}">
 					<td class="d-flex justify-content-between">
 						<span>{{ ingredient.name }}</span> <button type="button">+</button>
