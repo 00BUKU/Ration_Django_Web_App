@@ -28,7 +28,8 @@ def is_float(element: any) -> bool:
 
 
 def home(request):
-  return render(request, 'home.html')
+  top_favorites = Profile.count_favorites
+  return render(request, 'home.html', {'top_favorites': top_favorites})
  
 def about(request):
  return render(request, 'about.html')
