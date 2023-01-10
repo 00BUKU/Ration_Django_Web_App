@@ -195,6 +195,9 @@ def remove_review(request, review_id, recipe_id):
   review.delete()
   return redirect('detail', recipe_id=recipe_id)
 
+@login_required
+def my_profile(request):
+  return render(request, 'profile/calendar.html')
 
 def signup(request):
   error_message = ''
