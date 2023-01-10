@@ -5,7 +5,7 @@
 
   <div class="form-group has-search">
     <span class="fa fa-search form-control-feedback"></span>
-    <input id="filter_name" type="text" class="form-control" placeholder="Search">
+    <input id="filter_name" type="text" class="filter form-control" placeholder="Search">
   </div>
   <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="advanced">
     Additional Filters <i class="fa fa-angle-down"></i>
@@ -15,22 +15,22 @@
 	<div class="card card-body">    
 		<div class="row mb-4">
 			<div class="col-md-4">
-				<input type="number" min="0" max="5" placeholder="Rating" class="form-control">
+				<input id="filter_rating" type="number" min="0" max="5" placeholder="Rating" class="filter form-control">
 			</div>
 			<div class="col-md-4">
-				<input type="text" class="form-control" placeholder="Calories">
+				<input id="filter_calorie" type="text" class="filter form-control" type="number" placeholder="Calories">
 			</div>
 
 		</div>
 		<div class="row">
 			<div class="col-md-4">
-				<input type="text" class="form-control" placeholder="Carbohydrates">
+				<input id="filter_carbohydrate" type="text" class="filter form-control" type="number" placeholder="Carbohydrates">
 			</div>
 			<div class="col-md-4">
-				<input type="text" class="form-control" placeholder="Fat">
+				<input id="filter_fat" type="text" class="filter form-control" type="number" placeholder="Fat">
 			</div>
 			<div class="col-md-4">
-				<input type="text" class="form-control" placeholder="Protein">
+				<input id="filter_protein" type="text" class="filter form-control" type="number" placeholder="Protein">
 			</div>
 		</div>
 	</div>
@@ -38,15 +38,16 @@
   
 {% for recipe in recipes %}
 
-{% with nutrition=recipe.calculate_nutrition %}
-<div class="card recipe" data-title="{{ recipe.title }}"
+{% with nutrition=recipe.calculate_nutrition rating=recipe.average_rating%}
+
+<div class="card recipe" data-title="{{ recipe.title }}" data-rating="{{ rating }} "
 
 {% for key, value in nutrition.items %}
 	data-{{ key }}="{{ value }}" 
 {% endfor %}
 	
 >
-{% endwith %}	
+
 	<a href="{% url 'detail' recipe.id %}" class="stretched-link">
     {% if recipe.image %}
 				   <img src="{{ recipe.image.url }}" class="card-img-top">
@@ -54,30 +55,53 @@
    </a>
 	<div class="card-body">
 	<h2 class="card-title">{{ recipe }}</h2>
-	<h4 class="card-subtitle"><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
-		<span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
-		<span class="fa fa-star{% if recipe.average_rating < 3 %}-o {% endif %}"></span>
-		<span class="fa fa-star{% if recipe.average_rating < 4 %}-o {% endif %}" ></span>
-		<span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h4>
+	<h4 class="card-subtitle"><span class="fa fa-star{% if rating < 1 %}-o {% endif %}"></span>
+		<span class="fa fa-star{% if rating < 2 %}-o {% endif %}"></span>
+		<span class="fa fa-star{% if rating < 3 %}-o {% endif %}"></span>
+		<span class="fa fa-star{% if rating < 4 %}-o {% endif %}" ></span>
+		<span class="fa fa-star{% if rating < 5 %}-o {% endif %}"></span></h4>
 	<p class="card-text">{{ recipe.summary }}</p>
 	</div>
 </div>
+{% endwith %}	
 {% endfor %}
 
 
 
 <script>
-	$('#filter_name').on("keyup", function() {
-		const value = $(this).val().toLowerCase().trim()
+	$('.filter').on("input", filter)
+
+
+	function filter(event){
+		
+		let nameFilter = $('#filter_name').val();
+		nameFilter = nameFilter.toLowerCase().trim();
+		const ratingFilter = $('#filter_rating').val();
+		const calorieFilter = permitMinimum($('#filter_calorie').val());
+		const carbohydrateFilter = permitMinimum($('#filter_carbohydrate').val());
+		const fatFilter = permitMinimum($('#filter_fat').val());
+		const proteinFilter = permitMaximum($('#filter_protein').val());
 		$("div.recipe").each((i, e) => {
-			title = $(e).data('title').toString()
-			if (title.toLowerCase().includes(value)) {
-				$(e).show()
+			title = $(e).data('title').toString().toLowerCase();
+			rating = $(e).data('rating');
+			calorie = permitMaximum($(e).data('calorie'));
+			carbohydrate = permitMaximum($(e).data('carbohydrate'));
+			fat = permitMaximum($(e).data('fat'));
+			protein = permitMaximum($(e).data('protein'));
+			console.log(protein)
+			if (rating >= ratingFilter && title.includes(nameFilter) && calorie <= calorieFilter && carbohydrate <= carbohydrateFilter && fat <= fatFilter && protein >= proteinFilter){
+				$(e).show();
 			} else {
-				$(e).hide()
+				$(e).hide();
 			}
 		}
 		)
-	})
+		function permitMinimum(input) {
+			return input <= 0 ? Infinity : input
+		}
+		function permitMaximum(input) {
+			return input <= 0 ? 0 : input
+		}
+	}
 </script>
 {% endblock content %}
