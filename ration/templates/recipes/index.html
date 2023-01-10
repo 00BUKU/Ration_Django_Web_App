@@ -1,14 +1,45 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 <h1>Recipes List</h1>
 
+  <div class="form-group has-search">
+    <span class="fa fa-search form-control-feedback"></span>
+    <input id="filter_name" type="text" class="form-control" placeholder="Search">
+  </div>
+  <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="advanced">
+    Additional Filters <i class="fa fa-angle-down"></i>
+  </a>
 
+	<div class="collapse" id="collapseExample">
+	<div class="card card-body">    
+		<div class="row mb-4">
+			<div class="col-md-4">
+				<input type="number" min="0" max="5" placeholder="Rating" class="form-control">
+			</div>
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Calories">
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Carbohydrates">
+			</div>
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Fat">
+			</div>
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Protein">
+			</div>
+		</div>
+	</div>
+	</div>
+  
 {% for recipe in recipes %}
 
 {% with nutrition=recipe.calculate_nutrition %}
-<div class="card" 
+<div class="card recipe" data-title="{{ recipe.title }}"
 
 {% for key, value in nutrition.items %}
 	data-{{ key }}="{{ value }}" 
@@ -31,5 +62,18 @@
 
 
 
-
+<script>
+	$('#filter_name').on("keyup", function() {
+		const value = $(this).val().toLowerCase().trim()
+		$("div.recipe").each((i, e) => {
+			title = $(e).data('title').toString()
+			if (title.toLowerCase().includes(value)) {
+				$(e).show()
+			} else {
+				$(e).hide()
+			}
+		}
+		)
+	})
+</script>
 {% endblock content %}
