@@ -44,20 +44,20 @@
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>Created by: <a href="{% url 'profile_detail' recipe.user.id %}">{{ recipe.user }}</a></li>
                     <li>Date added: {{ recipe.date_added|date:"Y-m-d"}}</li> <hr />
-                    <li class="prewrap">Summary: {{ recipe.summary }}</li>
+                    <li class="prewrap">{{ recipe.summary }}</li>
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>Preparation time: {{ recipe.preparation_minutes }}</li>
                     <li>Cooking time: {{ recipe.cooking_minutes }}</li>
                     <li>Servings: {{ recipe.servings }}</li>
                     <hr />
-                    <li>Ingredients: <ul>
+                    <li><h4>Ingredients:</h4><ul>
                     {% for ingredient in ingredients %}
                         <li>{{ingredient.amount_tablespoons}} Tbpns: {{ ingredient.ingredient.name }}</li>
                     {% endfor %}
                          </ul></li>
                          <hr />
-                    <li class="prewrap">Directions: 
-                        {{ recipe.directions }} {{ average_rating }}</li>
+                    <li><h4>Directions:</h4></li>
+                    <li class="prewrap text-left">{{ recipe.directions }} {{ average_rating }}</li>
                 </ul>
                 {% if recipe.user == user %}
                     <a href="{% url 'update' recipe.id %}"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Edit</button></a>
