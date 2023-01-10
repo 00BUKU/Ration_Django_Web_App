@@ -67,3 +67,6 @@ table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
 }
 
+.prewrap {
+  white-space: pre-wrap
+}
