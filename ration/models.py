@@ -85,6 +85,17 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_daily_nutrition(self, date):
+        daily_meals = self.meal_set.filter(date=date)
+        daily_nutrition = {}
+        for meal in daily_meals:
+            for nutrient, value in meal.recipe.calculate_nutrition().items():
+                daily_nutrition[nutrient] = value + daily_nutrition.get(nutrient, 0)
+    
+    def fed_for_today(self):
+        return self.meal_set.filter(date=date.today()).count() >= len(MEALS) - 1
+
+
     @classmethod
     def count_favorites(cls):
         favorites = cls.favorites.through.objects.all()
@@ -107,4 +118,23 @@ class Review(models.Model):
         models.UniqueConstraint(fields=['recipe', 'user'], name='unique_review_per_user')
     ]
 
+MEALS = (
+	('B', 'Breakfast'),
+	('L', 'Lunch'),
+	('D', 'Dinner'),
+    ('S', 'Snack'),
+)
+
+class Meal(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    servings = models.FloatField(validators=[MinValueValidator(0.0)])
+    meal = meal = models.CharField(
+		max_length=1,
+		choices=MEALS, 
+		default=MEALS[0][0])
+    date = models.DateField('Meal date')
+
+    def __str__(self):
+        return f"{self.get_meal_display()} of {self.servings} servings {self.recipe.title} on {self.date}"
 

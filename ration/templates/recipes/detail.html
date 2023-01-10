@@ -6,7 +6,14 @@
     <div class="card-deck mb-3 text-center">
         <div class="card mb-4 box-shadow">
             <div class="card-header">
-                <h2 class="my-0 font-weight-normal">{{ recipe.title }}</h2>
+                <h2 class="my-0 font-weight-normal">{{ recipe.title }} 
+                {% if user.is_authenticated %}
+                    {% if is_favorited %}
+                        <a href="{% url 'unfavorite_recipe' recipe.id %}"><i class="fa fa-star"></i></a>
+                    {% else %}
+                        <a href="{% url 'favorite_recipe' recipe.id %}"><i class="fa fa-star-o"></i></a>
+                    {% endif %}   
+                {% endif %}</h2>
             </div>
             <div class="card-body">
                 <div>
@@ -17,13 +24,7 @@
                 </div>
                 <h1 class="card-title" >
                 <small class="text-muted"></small>
-                {% if user.is_authenticated %}
-                    {% if is_favorited %}
-                        <a href="{% url 'unfavorite_recipe' recipe.id %}"><i class="fa fa-star"></i></a>
-                    {% else %}
-                        <a href="{% url 'favorite_recipe' recipe.id %}"><i class="fa fa-star-o"></i></a>
-                    {% endif %}   
-                {% endif %}
+               
             </div>        
                 </h1>
                 <h2><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
