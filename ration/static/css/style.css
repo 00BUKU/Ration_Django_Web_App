@@ -6,6 +6,8 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  font-family: 'Nunito', sans-serif;
+  background: #F3F5F9;
 }
 /* Remove the navbar's default margin-bottom and rounded borders */ 
 .navbar {
@@ -69,4 +71,56 @@ bottom: .5em;
 
 .prewrap {
   white-space: pre-wrap
+}
+
+.card{
+  padding: 1em;
+}
+h2{
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 1px;
+  font-family: 'Montserrat', sans-serif;
+  color: #002147;
+  margin-bottom: 20px;
+}
+.btn{
+  font-size: 15px !important;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: none !important;
+  border: 0;
+  padding: 10px 20px !important;
+}
+.btn:focus{
+  box-shadow: none;
+}
+.btn.btn-primary{
+  background: #002147;
+  color: #ffffff;
+}
+.form-group label{
+  font-weight: 600;
+  letter-spacing: 0.010em;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.modal-body{
+  background: #F3F5F9;
+  border-radius: 10px;
+}
+.modal-body h4{
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+  font-family: 'Montserrat', sans-serif;
+  color: #002147;
+  margin-bottom: 20px;
+}
+.modal-body .form-control{
+  box-shadow: none;
+  height: 50px;
 }

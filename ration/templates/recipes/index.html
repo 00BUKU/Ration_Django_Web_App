@@ -40,7 +40,7 @@
 
 {% with nutrition=recipe.calculate_nutrition rating=recipe.average_rating%}
 
-<div class="card recipe" data-title="{{ recipe.title }}" data-rating="{{ rating }} "
+<div class="card recipe mb-1" data-title="{{ recipe.title }}" data-rating="{{ rating }} "
 
 {% for key, value in nutrition.items %}
 	data-{{ key }}="{{ value }}" 
@@ -50,7 +50,7 @@
 
 	<a href="{% url 'detail' recipe.id %}" class="stretched-link">
     {% if recipe.image %}
-				   <img src="{{ recipe.image.url }}" class="card-img-top">
+				   <img src="{{ recipe.image.url }}" class="card-img-top" alt="Image">
 				{% endif%}
    </a>
 	<div class="card-body">
