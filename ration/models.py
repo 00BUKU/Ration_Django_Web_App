@@ -28,7 +28,7 @@ class Recipe(models.Model):
     directions = models.TextField()
     cooking_minutes = models.IntegerField(validators=[MinValueValidator(0)])
     preparation_minutes = models.IntegerField(validators=[MinValueValidator(0)])
-    image = models.ImageField(upload_to=None, blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to="images/")
     servings = models.IntegerField(validators=[MinValueValidator(1)])
     ingredient = models.ManyToManyField(Ingredient, through='Amount')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -107,10 +107,4 @@ class Review(models.Model):
         models.UniqueConstraint(fields=['recipe', 'user'], name='unique_review_per_user')
     ]
 
-class Photo(models.Model):
-    url = models.CharField(max_length=200)
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Photo for recipe_id: {self.recipe_id} @{self.url}"
 

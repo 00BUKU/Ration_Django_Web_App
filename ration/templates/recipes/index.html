@@ -47,7 +47,11 @@
 	
 >
 {% endwith %}	
-	<a href="{% url 'detail' recipe.id %}" class="stretched-link"><img src="{{ recipe.image }}" alt="recipe image cap" class="card-img-top"></a>
+	<a href="{% url 'detail' recipe.id %}" class="stretched-link">
+    {% if recipe.image %}
+				   <img src="{{ recipe.image.url }}" class="card-img-top">
+				{% endif%}
+   </a>
 	<div class="card-body">
 	<h2 class="card-title">{{ recipe }}</h2>
 	<h4 class="card-subtitle"><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>

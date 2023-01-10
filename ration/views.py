@@ -6,8 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
 from django.http import HttpResponse
-from .models import Recipe, Review, Profile, Amount, Ingredient, Photo, SIZES
+from .models import Recipe, Review, Profile, Amount, Ingredient, SIZES
 from django.db.models import Q
+
 import uuid
 import boto3
 
@@ -221,21 +222,3 @@ def profile_detail(request, user_id):
     context = {'profile': profile}
     return render(request, 'registration/user_profile.html', context)
 
-
-def add_photo(request, recipe_id):
-    # photo-file will be the "name" attribute on the <input type="file">
-    photo_file = request.FILES.get('photo-file', None)
-    if photo_file:
-        s3 = boto3.client('s3')
-        # need a unique "key" for S3 / needs image file extension too
-        key = 'ration/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-        # just in case something goes wrong
-        try:
-            s3.upload_fileobj(photo_file, BUCKET, key)
-            # build the full url string
-            url = f"{S3_BASE_URL}{BUCKET}/{key}"
-            # we can assign to recipe_id or recipe (if you have a recipe object)
-            Photo.objects.create(url=url, recipe_id=recipe_id)
-        except:
-            print('An error occurred uploading file to S3')
-    return redirect('detail', recipe_id=recipe_id)
