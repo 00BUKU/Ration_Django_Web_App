@@ -6,27 +6,17 @@
     <div class="card-deck mb-3 text-center">
         <div class="card mb-4 box-shadow">
             <div class="card-header">
-            </div>
-            <!-- Insert photo markup below this comment -->
-            {% for photo in recipe.photo_set.all %}
-              <img class="responsive-img card-panel" src="{{photo.url}}">
-            {% empty %}
-              <div class="card-panel teal-text center-align">No Photos Uploaded</div>
-            {% endfor %}
-            <!-- new code below -->
-        <form action="{% url 'add_photo' recipe.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
-            {% csrf_token %}
-            <input type="file" name="photo-file">
-            <br><br>
-            <input type="submit" class="btn" value="Upload Photo">
-        </form>
-                
-                <h4 class="my-0 font-weight-normal"></h4>
+                <h2 class="my-0 font-weight-normal">{{ recipe.title }}</h2>
             </div>
             <div class="card-body">
+                <div>
+                    {% if recipe.image %}
+                       <img src="{{ recipe.image.url }}" width="350">
+                    {% endif%}
+                    
+                </div>
                 <h1 class="card-title" >
-                <small class="text-muted">{{ recipe.title }}</small>
-            
+                <small class="text-muted"></small>
                 {% if user.is_authenticated %}
                     {% if is_favorited %}
                         <a href="{% url 'unfavorite_recipe' recipe.id %}"><i class="fa fa-star"></i></a>
@@ -34,7 +24,7 @@
                         <a href="{% url 'favorite_recipe' recipe.id %}"><i class="fa fa-star-o"></i></a>
                     {% endif %}   
                 {% endif %}
-                    
+            </div>        
                 </h1>
                 <h2><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
             <span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
