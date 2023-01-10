@@ -13,6 +13,7 @@ class Ingredient(models.Model):
     carbohydrate = models.FloatField(validators=[MinValueValidator(0.0)])
     fat = models.FloatField(validators=[MinValueValidator(0.0)])
     protein = models.FloatField(validators=[MinValueValidator(0.0)])
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
