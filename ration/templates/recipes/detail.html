@@ -85,7 +85,7 @@
                         {% for nutrient, value in recipe.calculate_nutrition.items %}
                             <tr>
                                 <th scope="row">{{ nutrient.capitalize }}</th>
-                                <td>{{ value|floatformat:2 }}</td>
+                                <td>{{ value|floatformat:2 }}{% if nutrient != 'calorie' %}g{% endif %}</td>
                             </tr> 
                         {% empty %}
                         No nutritional information available
