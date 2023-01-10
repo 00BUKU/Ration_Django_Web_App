@@ -53,6 +53,10 @@ footer {
   position:relative;
 }
 
+.card-group {
+  flex-wrap: wrap;
+}
+
 table.dataTable {
   max-height: 10%;
 }
