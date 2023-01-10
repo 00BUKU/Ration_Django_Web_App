@@ -52,7 +52,7 @@
                     <hr />
                     <li><h4>Ingredients:</h4><ul>
                     {% for ingredient in ingredients %}
-                        <li>{{ingredient.amount_tablespoons}} Tbpns: {{ ingredient.ingredient.name }}</li>
+                        <li>{{ingredient.amount}} {{ ingredient.get_size_display }}s: {{ ingredient.ingredient.name }}</li>
                     {% endfor %}
                          </ul></li>
                          <hr />

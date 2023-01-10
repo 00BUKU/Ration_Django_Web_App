@@ -28,7 +28,7 @@ class Recipe(models.Model):
     directions = models.TextField()
     cooking_minutes = models.IntegerField(validators=[MinValueValidator(0)])
     preparation_minutes = models.IntegerField(validators=[MinValueValidator(0)])
-    image = models.ImageField(upload_to=None)
+    image = models.ImageField(upload_to=None, blank=True)
     servings = models.IntegerField(validators=[MinValueValidator(1)])
     ingredient = models.ManyToManyField(Ingredient, through='Amount')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -42,7 +42,12 @@ class Recipe(models.Model):
             for key, value in ingredient.ingredient.__dict__.items():
                 if type(value) == float:
                     previous_amount = nutrient.get(key, 0)
-                    nutrient[key] = previous_amount + value*ingredient.amount_tablespoons
+                    size_multiplier = {
+                        'S': 1/3 ,
+                        'M': 1,
+                        'L': 16,
+                    }
+                    nutrient[key] = previous_amount + value*ingredient.amount*size_multiplier.get(ingredient.size, 1)
         for key in nutrient:
             nutrient[key] /= self.servings 
         return nutrient
@@ -52,11 +57,22 @@ class Recipe(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'recipe_id': self.id})
-    
+
+SIZES = (
+	('S', 'Teaspoon'),
+	('M', 'Tablespoon'),
+	('L', 'Cup'),
+)
+
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount_tablespoons = models.FloatField(validators=[MinValueValidator(0.0)])
+    amount = models.FloatField(validators=[MinValueValidator(0.0)])
+    size = models.CharField(
+		max_length=1,
+		# this will help us make a select menu when a form is created from this model
+		choices=SIZES, 
+		default=SIZES[1][0])
 
     def __str__(self):
         return f"{self.recipe}: {self.ingredient}"
