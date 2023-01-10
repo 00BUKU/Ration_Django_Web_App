@@ -10,7 +10,12 @@
 	<a href="{% url 'detail' recipe.id %}">
 		<div class="card-content">
 			<h3> <span class="card-title">{{ recipe.title }}</span></h3>
-            <p>Image: {{ recipe.image }}</p>
+            <p> <div>
+				{% if recipe.image %}
+				   <img src="{{ recipe.image.url }}" width="100">
+				{% endif%}
+				
+			</div></p>
 			<p><strong> Date: </strong> {{ recipe.date_added|date:"Y-m-d"}}</p>
 			<p>Time: {{ recipe.cooking_minutes|add:recipe.preparation_minutes }}</p>
 		</div>
