@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
+import operator
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=50)
@@ -41,7 +42,12 @@ class Recipe(models.Model):
             for key, value in ingredient.ingredient.__dict__.items():
                 if type(value) == float:
                     previous_amount = nutrient.get(key, 0)
-                    nutrient[key] = previous_amount + value*ingredient.amount_tablespoons
+                    size_multiplier = {
+                        'S': 1/3 ,
+                        'M': 1,
+                        'L': 16,
+                    }
+                    nutrient[key] = previous_amount + value*ingredient.amount*size_multiplier.get(ingredient.size, 1)
         for key in nutrient:
             nutrient[key] /= self.servings 
         return nutrient
@@ -51,11 +57,22 @@ class Recipe(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'recipe_id': self.id})
-    
+
+SIZES = (
+	('S', 'Teaspoon'),
+	('M', 'Tablespoon'),
+	('L', 'Cup'),
+)
+
 class Amount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount_tablespoons = models.FloatField(validators=[MinValueValidator(0.0)])
+    amount = models.FloatField(validators=[MinValueValidator(0.0)])
+    size = models.CharField(
+		max_length=1,
+		# this will help us make a select menu when a form is created from this model
+		choices=SIZES, 
+		default=SIZES[1][0])
 
     def __str__(self):
         return f"{self.recipe}: {self.ingredient}"
@@ -67,6 +84,17 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    @classmethod
+    def count_favorites(cls):
+        favorites = cls.favorites.through.objects.all()
+        favorites_dictionary = {}
+        for favorite in favorites:
+            if favorite.recipe not in favorites_dictionary:
+                favorites_dictionary[favorite.recipe] = 1
+            else:
+                favorites_dictionary[favorite.recipe] += 1
+        return sorted(favorites_dictionary.items(), key=operator.itemgetter(1),reverse=True)[:4]
 
 class Review(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

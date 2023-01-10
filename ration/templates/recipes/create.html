@@ -20,6 +20,7 @@
 				<tr>
 					<th class="th-sm">Ingredient</th>
 					<th class="th-sm">Amount</th>
+					<th class="th-sm">Size</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,12 +32,25 @@
 						<button class="removeIngredient" type="button">X</button> <span>{{ ingredient.ingredient.name }}</span>
 					</td>
 					<td>
-						<input type="number" step="0.01" name="amount-{{ ingredient.ingredient.id }}" value="{{ ingredient.amount_tablespoons }}" min="0" required="">
+						<input type="number" step="0.01" name="amount-{{ ingredient.ingredient.id }}" value="{{ ingredient.amount }}" min="0" required="">
+					</td>
+					<td>
+						<select name="size-{{ ingredient.ingredient.id }}" required="">
+							
+							{% for option in SIZES %}
+								<option value="{{ option.0 }}" 
+								{% if ingredient.size == option.0 %}
+									selected="selected"
+								{% endif %}
+									>{{ option.1 }}</option>
+							{% endfor %}
+								
+						</select>
 					</td>
 				</tr>	
 				{% endfor %}
 					
-				
+					
 			</tbody>
 		</table>
 		<table id="ingredient-options" class="table table-hover table-striped table-bordered table-sm" cellspacing="0"
@@ -62,7 +76,6 @@
 	</div>
 	<input type="submit" value="Submit" class="btn">
 </form>
-
 <script>
 	$(document).ready(function () {
 		$('#ingredient-options').DataTable({
@@ -81,6 +94,13 @@
 			</td>
 			<td>
 				<input type="number" step="0.01" name="amount-${row.data('id')}" min="0" required="">
+			</td>
+			<td>
+				<select name="size-${row.data('id')}" required="">
+					<option value="S">Teaspoons</option>
+					<option value="M" selected>Tablespoons</option>
+					<option value="L">Cups</option>
+				</select>
 			</td>
 		</tr>`)
             )

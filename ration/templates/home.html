@@ -12,24 +12,21 @@
 </div>
 
   <div class="container-fluid bg-3 text-center">    
-    <h3>The favorites</h3><br>
+    <h3>The Favorites</h3><br>
     <div class="row">
-      <div class="col-sm-3">
-        <p>Some text..</p>
-        <img src="" class="img-responsive" style="width:100%" alt="Image">
+      
+      {% for favorite in top_favorites %}
+        <div class="col-sm-3">
+        <h3>{{favorite.0.title}}</h3>
+        <h4><span class="fa fa-star{% if favorite.0.average_rating < 1 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if favorite.0.average_rating < 2 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if favorite.0.average_rating < 3 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if favorite.0.average_rating < 4 %}-o {% endif %}" ></span>
+            <span class="fa fa-star{% if favorite.0.average_rating < 5 %}-o {% endif %}"></span>
+        <img src="{{ favorite.0.image }}" class="img-responsive" style="width:100%" alt="Image"></h4>
       </div>
-      <div class="col-sm-3"> 
-        <p>Some text..</p>
-        <img src="" class="img-responsive" style="width:100%" alt="Image">
-      </div>
-      <div class="col-sm-3"> 
-        <p>Some text..</p>
-        <img src="" class="img-responsive" style="width:100%" alt="Image">
-      </div>
-      <div class="col-sm-3">
-        <p>Some text..</p>
-        <img src="" class="img-responsive" style="width:100%" alt="Image">
-      </div>
+      {% endfor %}
+
     </div>
   </div><br>
   

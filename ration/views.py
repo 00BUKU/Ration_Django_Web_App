@@ -6,7 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
 from django.http import HttpResponse
-from .models import Recipe, Review, Profile, Amount, Ingredient,
+from .models import Recipe, Review, Profile, Amount, Ingredient, SIZES
+from django.db.models import Q
+
 import uuid
 import boto3
 
@@ -28,7 +30,8 @@ def is_float(element: any) -> bool:
 
 
 def home(request):
-  return render(request, 'home.html')
+  top_favorites = Profile.count_favorites
+  return render(request, 'home.html', {'top_favorites': top_favorites})
  
 def about(request):
  return render(request, 'about.html')
@@ -77,14 +80,21 @@ def unfavorite_recipe(request, recipe_id):
 def recipe_create(request):
   if request.method == "POST":
     form = CreateRecipeForm(request.POST, request.FILES)
-    print(request.POST)
     amountDict = {}
     for key, value in request.POST.items():
-      print(key)
       if key.startswith('amount-') and is_float(value):
-        print(key[7:])
         if Ingredient.objects.filter(id=key[7:]).exists():
-          amountDict[key[7:]] = float(value)
+          if key[7:] in amountDict:
+            amountDict[key[7:]]['amount'] = float(value)
+          else:
+            amountDict[key[7:]] = {'amount': float(value)}
+      elif key.startswith('size-'):
+        if Ingredient.objects.filter(id=key[5:]).exists():
+          if key[5:] in amountDict:
+            amountDict[key[5:]]['size'] = value
+          else:
+            amountDict[key[5:]] = {'size': value}
+
     if form.is_valid():
       
       new_recipe = Recipe()
@@ -93,7 +103,7 @@ def recipe_create(request):
       new_recipe.user_id = request.user.id
       new_recipe.save()
       for key, value in amountDict.items():
-        amount = Amount(recipe_id=new_recipe.id, ingredient_id=key, amount_tablespoons=value)
+        amount = Amount(recipe_id=new_recipe.id, ingredient_id=key, amount=value.get('amount', 0.0), size=value.get('size', 'M'))
         amount.save()
       return redirect('detail', recipe_id=new_recipe.id)
     else:
@@ -101,12 +111,48 @@ def recipe_create(request):
   else:
     form = CreateRecipeForm()
     ingredient_list = Ingredient.objects.all()
-    return render(request, 'recipes/create.html', { 'form': form, 'ingredient_list': ingredient_list })
+    return render(request, 'recipes/create.html', { 'form': form, 'ingredient_list': ingredient_list, })
 
 @login_required
 def recipe_update(request, recipe_id):
   if request.method == "POST":
-    pass
+    form = CreateRecipeForm(request.POST, request.FILES)
+    amountDict = {}
+    for key, value in request.POST.items():
+      if key.startswith('amount-') and is_float(value):
+        if Ingredient.objects.filter(id=key[7:]).exists():
+          if key[7:] in amountDict:
+            amountDict[key[7:]]['amount'] = float(value)
+          else:
+            amountDict[key[7:]] = {'amount': float(value)}
+      elif key.startswith('size-'):
+        if Ingredient.objects.filter(id=key[5:]).exists():
+          if key[5:] in amountDict:
+            amountDict[key[5:]]['size'] = value
+          else:
+            amountDict[key[5:]] = {'size': value}
+
+    if form.is_valid():
+      recipe = Recipe.objects.get(id=recipe_id)
+      for key, value in form.cleaned_data.items():
+        setattr(recipe, key, value)
+      recipe.save()
+      existing_ingredients = Amount.objects.filter(recipe_id=recipe_id)
+      for key, value in amountDict.items():
+        existing_ingredients = existing_ingredients.exclude(ingredient_id=key)
+        if Amount.objects.filter(recipe_id=recipe_id, ingredient_id=key).exists():
+          amount = Amount.objects.get(recipe_id=recipe_id, ingredient_id=key)
+          amount.amount = value.get('amount', 0.0)
+          amount.size = value.get('size', 'M')
+          amount.save()
+        else:
+          amount = Amount(recipe_id=recipe_id, ingredient_id=key, amount=value.get('amount', 0.0), size=value.get('size', 'M'))
+          amount.save()
+      for ingredient in existing_ingredients:
+        ingredient.delete()
+      return redirect('detail', recipe_id=recipe_id)
+    else:
+      return redirect('update', recipe_id)
   else:
     recipe = Recipe.objects.get(id=recipe_id)
     data = {
@@ -121,7 +167,7 @@ def recipe_update(request, recipe_id):
     form = CreateRecipeForm(initial=data)
     ingredients = Amount.objects.filter(recipe_id=recipe_id)
     ingredient_list = Ingredient.objects.exclude(id__in = ingredients.values_list('ingredient_id'))
-  context = {'recipe': recipe, 'form': form, 'ingredients': ingredients, 'ingredient_list': ingredient_list }
+  context = {'recipe': recipe, 'form': form, 'ingredients': ingredients, 'ingredient_list': ingredient_list, 'SIZES':SIZES }
   return render(request, 'recipes/create.html', context)
 
 def delete_recipe(request, recipe_id):

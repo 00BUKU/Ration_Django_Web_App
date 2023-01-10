@@ -42,7 +42,7 @@
                     <hr />
                     <li><h4>Ingredients:</h4><ul>
                     {% for ingredient in ingredients %}
-                        <li>{{ingredient.amount_tablespoons}} Tbpns: {{ ingredient.ingredient.name }}</li>
+                        <li>{{ingredient.amount}} {{ ingredient.get_size_display }}s: {{ ingredient.ingredient.name }}</li>
                     {% endfor %}
                          </ul></li>
                          <hr />
@@ -75,7 +75,7 @@
                         {% for nutrient, value in recipe.calculate_nutrition.items %}
                             <tr>
                                 <th scope="row">{{ nutrient.capitalize }}</th>
-                                <td>{{ value|floatformat:2 }}</td>
+                                <td>{{ value|floatformat:2 }}{% if nutrient != 'calorie' %}g{% endif %}</td>
                             </tr> 
                         {% empty %}
                         No nutritional information available
