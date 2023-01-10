@@ -6,7 +6,16 @@
 
 
 {% for recipe in recipes %}
-<div class="card" data-calories="">
+
+{% with nutrition=recipe.calculate_nutrition %}
+<div class="card" 
+
+{% for key, value in nutrition.items %}
+	data-{{ key }}="{{ value }}" 
+{% endfor %}
+	
+>
+{% endwith %}	
 	<a href="{% url 'detail' recipe.id %}" class="stretched-link"><img src="{{ recipe.image }}" alt="recipe image cap" class="card-img-top"></a>
 	<div class="card-body">
 	<h2 class="card-title">{{ recipe }}</h2>
