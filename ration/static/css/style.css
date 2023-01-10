@@ -12,7 +12,7 @@ body {
   margin-bottom: 0;
   border-radius: 0;
 }
-  
+
 main {
   flex: 1 0 auto;
 }
@@ -27,7 +27,21 @@ footer {
   padding: 25px;
 }
 
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
 
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
 
 .notification.space-below{
   margin-bottom: 20px;
@@ -51,4 +65,8 @@ table.dataTable thead .sorting_desc:before,
 table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
+}
+
+.prewrap {
+  white-space: pre-wrap
 }
