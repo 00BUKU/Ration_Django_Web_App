@@ -10,6 +10,16 @@ from .models import Recipe, Review, Profile, Amount, Ingredient
 
 from .forms import RegisterForm, ReviewForm, CreateRecipeForm
 
+def is_float(element: any) -> bool:
+    if element is None: 
+        return False
+    try:
+        float(element)
+        return True
+    except ValueError:
+        return False
+
+
 def home(request):
   return render(request, 'home.html')
  
@@ -60,19 +70,52 @@ def unfavorite_recipe(request, recipe_id):
 def recipe_create(request):
   if request.method == "POST":
     form = CreateRecipeForm(request.POST, request.FILES)
+    print(request.POST)
+    amountDict = {}
+    for key, value in request.POST.items():
+      print(key)
+      if key.startswith('amount-') and is_float(value):
+        print(key[7:])
+        if Ingredient.objects.filter(id=key[7:]).exists():
+          amountDict[key[7:]] = float(value)
     if form.is_valid():
+      
       new_recipe = Recipe()
       for key, value in form.cleaned_data.items():
         setattr(new_recipe, key, value)
       new_recipe.user_id = request.user.id
       new_recipe.save()
+      for key, value in amountDict.items():
+        amount = Amount(recipe_id=new_recipe.id, ingredient_id=key, amount_tablespoons=value)
+        amount.save()
       return redirect('detail', recipe_id=new_recipe.id)
     else:
       return redirect('recipe_create')
   else:
     form = CreateRecipeForm()
-    ingredients = Ingredient.objects.all()
-    return render(request, 'recipes/create.html', { 'form': form, 'ingredients': ingredients })
+    ingredient_list = Ingredient.objects.all()
+    return render(request, 'recipes/create.html', { 'form': form, 'ingredient_list': ingredient_list })
+
+@login_required
+def recipe_update(request, recipe_id):
+  if request.method == "POST":
+    pass
+  else:
+    recipe = Recipe.objects.get(id=recipe_id)
+    data = {
+      "title": recipe.title,
+      "summary": recipe.summary,
+      "directions": recipe.directions,
+      "cooking_minutes": recipe.cooking_minutes,
+      "preparation_minutes": recipe.preparation_minutes,
+      "image": recipe.image,
+      "servings": recipe.servings,
+    }
+    form = CreateRecipeForm(initial=data)
+    ingredients = Amount.objects.filter(recipe_id=recipe_id)
+    ingredient_list = Ingredient.objects.exclude(id__in = ingredients.values_list('ingredient_id'))
+  context = {'recipe': recipe, 'form': form, 'ingredients': ingredients, 'ingredient_list': ingredient_list }
+  return render(request, 'recipes/create.html', context)
 
 def delete_recipe(request, recipe_id):
   recipe=Recipe.objects.get(id=recipe_id)
