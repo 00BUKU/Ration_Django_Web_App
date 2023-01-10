@@ -10,6 +10,16 @@ from .models import Recipe, Review, Profile, Amount, Ingredient
 
 from .forms import RegisterForm, ReviewForm, CreateRecipeForm
 
+def is_float(element: any) -> bool:
+    if element is None: 
+        return False
+    try:
+        float(element)
+        return True
+    except ValueError:
+        return False
+
+
 def home(request):
   return render(request, 'home.html')
  
@@ -60,12 +70,24 @@ def unfavorite_recipe(request, recipe_id):
 def recipe_create(request):
   if request.method == "POST":
     form = CreateRecipeForm(request.POST, request.FILES)
+    print(request.POST)
+    amountDict = {}
+    for key, value in request.POST.items():
+      print(key)
+      if key.startswith('amount-') and is_float(value):
+        print(key[7:])
+        if Ingredient.objects.filter(id=key[7:]).exists():
+          amountDict[key[7:]] = float(value)
     if form.is_valid():
+      
       new_recipe = Recipe()
       for key, value in form.cleaned_data.items():
         setattr(new_recipe, key, value)
       new_recipe.user_id = request.user.id
       new_recipe.save()
+      for key, value in amountDict.items():
+        amount = Amount(recipe_id=new_recipe.id, ingredient_id=key, amount_tablespoons=value)
+        amount.save()
       return redirect('detail', recipe_id=new_recipe.id)
     else:
       return redirect('recipe_create')

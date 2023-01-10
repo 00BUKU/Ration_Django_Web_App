@@ -65,7 +65,7 @@
 				<button class="removeIngredient" type="button">X</button> <span>${row.find('span').prop("innerText")}</span>
 			</td>
 			<td>
-				<input type="number" step="0.01" name="${row.data('id')}-amount" min="0" required="">
+				<input type="number" step="0.01" name="amount-${row.data('id')}" min="0" required="">
 			</td>
 		</tr>`)
             )
