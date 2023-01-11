@@ -93,20 +93,15 @@
   <form method="post" action="{% url 'add_review' recipe.id %}">
            {% csrf_token %}
 
-          <h3>Leave a review: </h3>
-          <div  class="control">
-              <div class="select">
-                  <div>Rating: </div>
-                  <select  name="rating">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3" selected>3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                  </select>
+           <h3>Leave a review: </h3>
+           <h2><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if recipe.average_rating < 3 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if recipe.average_rating < 4 %}-o {% endif %}" ></span>
+            <span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h2>
               </div>
-          </div>
-      </div>
+             </div>
+           </div>
       <div class="field">
           <label>Comment</label>
           <div class="control">
