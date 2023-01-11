@@ -49,8 +49,8 @@
 
 
     function generate_year_range(start, end) {
-    var years = "";
-    for (var year = start; year <= end; year++) {
+    let years = "";
+    for (let year = start; year <= end; year++) {
         years += "<option value='" + year + "'>" + year + "</option>";
     }
     return years;
@@ -70,15 +70,14 @@ createYear = generate_year_range(1970, 2050);
 
 document.getElementById("year").innerHTML = createYear;
 
-var calendar = document.getElementById("calendar");
-var lang = calendar.getAttribute('data-lang');
+const calendar = document.getElementById("calendar");
 
-var months = "";
-var days = "";
+let months = "";
+let days = "";
 
-var monthDefault = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthDefault = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-var dayDefault = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const dayDefault = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 
 months = monthDefault;
@@ -86,7 +85,7 @@ days = dayDefault;
 
 
 
-var $dataHead = "<tr>";
+let $dataHead = "<tr>";
 for (dhead in days) {
     $dataHead += "<th data-days='" + days[dhead] + "'>" + days[dhead] + "</th>";
 }
@@ -121,7 +120,7 @@ function jump() {
 
 function showCalendar(month, year) {
 
-    var firstDay = ( new Date( year, month ) ).getDay();
+    const firstDay = ( new Date( year, month ) ).getDay();
 
     tbl = document.getElementById("calendar-body");
 
@@ -134,13 +133,13 @@ function showCalendar(month, year) {
     selectMonth.value = month;
 
     // creating all cells
-    var date = 1;
-    for ( var i = 0; i < 6; i++ ) {
+    let date = 1;
+    for ( let i = 0; i < 6; i++ ) {
         
-        var row = document.createElement("tr");
+        const row = document.createElement("tr");
 
         
-        for ( var j = 0; j < 7; j++ ) {
+        for ( let j = 0; j < 7; j++ ) {
             if ( i === 0 && j < firstDay ) {
                 cell = document.createElement( "td" );
                 cellText = document.createTextNode("");
