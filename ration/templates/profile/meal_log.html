@@ -36,11 +36,11 @@
                     <th scope="Row">{{ m.1 }}</th>
                     
                     {% if forloop.first %}
-                    <td>Calories</td>
-                    <td>Carbohydrates</td>
-                    <td>Fat</td>
-                    <td>Protein</td>
-                    <td></td>
+                    <th>Calories</th>
+                    <th>Carbohydrates</th>
+                    <th>Fat</th>
+                    <th>Protein</th>
+                    <th></th>
                     {% else %}
                     <td></td>
                     <td></td>
@@ -66,7 +66,7 @@
                 <tr class="total {{m.1}}">
                     
                     {% if forloop.last %}
-                    <td><a href="{% url 'meal_search' %}">Add Meal</a></td>
+                    <td class="text-center"><a href="{% url 'meal_search' %}"><button class="btn">Add Meal</a></button></td>
                     {% else %}
                     <td></td>
                     {% endif %}                    
@@ -78,14 +78,29 @@
                 </tr>
                 {% endfor %}
                 <tr class="total-daily">
-                    <th>Total</th>
+                    <th class="text-right">Total</th>
                     <td class="calorie"></td>
                     <td class="carbohydrate"></td>
                     <td class="fat"></td>
                     <td class="protein"></td>
                     <td></td>
                 </tr>
-                
+                <tr class="goal-daily">
+                    <th class="text-right">Daily Goal</th>
+                    <td class="calorie">{{ user.profile.daily_calorie }}</td>
+                    <td class="carbohydrate">{{ user.profile.daily_carbohydrate }}</td>
+                    <td class="fat">{{ user.profile.daily_fat }}</td>
+                    <td class="protein">{{ user.profile.daily_protein }}</td>
+                    <td></td>
+                </tr>
+                <tr class="remaining">
+                    <th class="text-right">Remaining</th>
+                    <td class="calorie"></td>
+                    <td class="carbohydrate"></td>
+                    <td class="fat"></td>
+                    <td class="protein"></td>
+                    <td></td>
+                </tr>
             </tbody> 
         </table>
     </div>
@@ -107,11 +122,17 @@
 
             })
             values.forEach(function(v) {
-                value = 0;
+                let value = 0;
                 $(`.total > .${v}`).each(function() {
                     value += parseFloat($(this).text());
                 })
                 $(`.total-daily > .${v}`).text(value.toFixed(2));
+            })
+            values.forEach(function(v) {
+                let value = parseFloat($(`.goal-daily > .${v}`).text());
+                value -= parseFloat($(`.total-daily > .${v}`).text());
+                console.log(value)
+                $(`.remaining > .${v}`).text(value.toFixed(2));
             })
 
             const ctx = document.getElementById('myChart').getContext('2d');
