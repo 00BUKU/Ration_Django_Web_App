@@ -140,6 +140,12 @@
             <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}</a>
         </p>
         {% if request.user.is_authenticated %} 
+        
+        <form method="POST" action="{% url 'update_review' review.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn" value="Delete">Edit</button>
+        </form>
+        
         <form action ="{% url 'remove_review' recipe.id review.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" class="btn" value="Delete">Delete</button>
@@ -147,6 +153,7 @@
         {% else %}
         <p> You didn't add a review! You need to signup to add and edit a review! </p>
         {% endif%}
+
     </div>
 
   {% empty %}

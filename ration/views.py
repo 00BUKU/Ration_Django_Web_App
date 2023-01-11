@@ -4,7 +4,7 @@ from django.views.generic import DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import HttpResponse
 from .models import Recipe, Review, Profile, Amount, Ingredient, Meal, SIZES, MEALS
 import datetime
@@ -187,6 +187,11 @@ def add_review(request, recipe_id):
     new_review.recipe_id = recipe_id
     new_review.save()
   return redirect('detail', recipe_id=recipe_id)
+
+class ReviewUpdate(UpdateView):
+  model = Review
+  template_name= 'update_review.html'
+  fields = ['rating', 'comment']
   
 def remove_review(request, review_id, recipe_id):
   
