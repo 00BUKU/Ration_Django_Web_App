@@ -6,9 +6,12 @@
     <h1>You searched for "{{ searched }}".</h1>
     <br />
         {% for recipe in recipes %}
-    <div class ="col-sm-6">
         <div class="card">
-            <a href="{% url 'detail' recipe.id %}" class="stretched-link"><img src="{{ recipe.image.url }}" alt="recipe image cap" class="card-img-top"></a>
+            <a href="{% url 'detail' recipe.id %}" class="stretched-link">
+            {% if recip.image %}
+                <img src="{{ recipe.image.url }}" alt="recipe image cap" class="card-img-top">
+            {% endif %}
+                </a>
             <div class="card-body">
             <h2 class="card-title">{{ recipe }}</h2>
             <h4 class="card-subtitle"><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
@@ -19,7 +22,6 @@
             <p class="card-text">{{ recipe.summary }}</p>
             </div>
         </div>
-    </div>
         {% endfor %}
     {% else %}
     <h1>You forgot to enter a search form.</h1>
