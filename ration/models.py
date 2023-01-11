@@ -36,10 +36,7 @@ class Recipe(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def average_rating(self) -> float:
-        reviews = Review.objects.filter(recipe=self)
-        if reviews.exists():
-            return round(reviews.aggregate(Avg("rating"))["rating__avg"],1)
-        return 0
+        return Review.objects.filter(recipe=self).aggregate(Avg("rating"))["rating__avg"] or 0
 
     def get_star_rating(self):
         return range(0, int(self.average_rating()))

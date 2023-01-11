@@ -16,6 +16,11 @@
 	{{ form.as_p }}
 	<div class="d-flex justify-content-around align-items-start p-2 table-sm" cellspacing="0">
 		<table id="ingredient-list" class="table">
+			<colgroup>
+				<col class="column_ingredient">
+                <col class="column_data">
+                <col class="column_data">
+			</colgroup>
 			<thead>
 				<tr>
 					<th class="th-sm">Ingredient</th>
@@ -66,7 +71,7 @@
 			{% for ingredient in ingredient_list %}
 				<tr class = "addIngredient" data-id="{{ ingredient.id }}">
 					<td class="d-flex justify-content-between">
-						<span>{{ ingredient.name }}</span> <button type="button">+</button>
+						<span>{{ ingredient.name }}</span> <button class="btn btn-light" type="button">+</button>
 					</td>
 				</tr>
 			{% endfor %}
@@ -74,8 +79,10 @@
 			</tbody>
 		</table>
 	</div>
-	<input type="submit" value="Submit" class="btn">
+	<input type="submit" value="Submit" class="btn btn-outline-primary">
+	
 </form>
+<br />
 <script>
 	$(document).ready(function () {
 		$('#ingredient-options').DataTable({
@@ -83,20 +90,23 @@
 			"scrollCollapse": true,
 		});
 		$('.dataTables_length').addClass('bs-select');
+		$('#ingredient-options_filter > input').addClass('form-control')
+		$('.paginate_button').addClass('btn')
 	});
+
 
 	$('#ingredient-options').on('click', '.addIngredient', function(event) {
 		row = $(this).closest('tr');
 		$("#ingredient-list").find('tbody')
     	.append($(`<tr data-id=${row.data('id')}>
 			<td class="name">
-				<button class="removeIngredient" type="button">X</button> <span>${row.find('span').prop("innerText")}</span>
+				<button class="removeIngredient btn btn-light" type="button">X</button> <span>${row.find('span').prop("innerText")}</span>
 			</td>
 			<td>
-				<input type="number" step="0.01" name="amount-${row.data('id')}" min="0" required="">
+				<input type="number" class="form-control" step="0.01" name="amount-${row.data('id')}" min="0" required="">
 			</td>
 			<td>
-				<select name="size-${row.data('id')}" required="">
+				<select class="form-control" name="size-${row.data('id')}" required="">
 					<option value="S">Teaspoons</option>
 					<option value="M" selected>Tablespoons</option>
 					<option value="L">Cups</option>
