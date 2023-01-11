@@ -21,7 +21,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light" data-spy="affix" data-offset-top="197">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">ration</a>
+        <a class="navbar-brand"  href="{% url 'home' %}"> {% load static %} <img src="{% static "images/logo3.png" %}" alt="home" width="90px" height="24px"></a>
         <ul class="nav navbar-nav nav-tabs">
           <li><a class="nav-link" href="{% url 'about' %}">About</a></li>
           <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" href='#' role="button" aria-haspopup="true" aria-expanded="false">Recipes</a>
