@@ -7,6 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 import operator
+import datetime
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=50)
@@ -32,6 +33,7 @@ class Recipe(models.Model):
     servings = models.IntegerField(validators=[MinValueValidator(1)])
     ingredient = models.ManyToManyField(Ingredient, through='Amount')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def average_rating(self) -> float:
         return Review.objects.filter(recipe=self).aggregate(Avg("rating"))["rating__avg"] or 0
@@ -79,21 +81,23 @@ class Amount(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, upload_to=None)
+    image = models.ImageField(null=True, blank=True, upload_to="profile/")
     favorites = models.ManyToManyField(Recipe, blank=True)
 
     def __str__(self):
         return self.user.username
 
-    def get_daily_nutrition(self, date):
+    def get_daily_nutrition(self, day, month, year):
+        date = datetime.datetime(year, month, day)
         daily_meals = self.meal_set.filter(date=date)
         daily_nutrition = {}
         for meal in daily_meals:
             for nutrient, value in meal.recipe.calculate_nutrition().items():
                 daily_nutrition[nutrient] = value + daily_nutrition.get(nutrient, 0)
     
-    def fed_for_today(self):
-        return self.meal_set.filter(date=date.today()).count() >= len(MEALS) - 1
+    def fed_for_day(self, day, month, year):
+        date = datetime.datetime(year, month, day)
+        return self.meal_set.filter(date=date).count() >= len(MEALS) - 1
 
 
     @classmethod

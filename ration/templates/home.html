@@ -16,17 +16,25 @@
     <div class="row">
       
       {% for favorite in top_favorites %}
+        
         <div class="col-sm-3">
-        <h3>{{favorite.0.title}}</h3>
-        <h4><span class="fa fa-star{% if favorite.0.average_rating < 1 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if favorite.0.average_rating < 2 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if favorite.0.average_rating < 3 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if favorite.0.average_rating < 4 %}-o {% endif %}" ></span>
-            <span class="fa fa-star{% if favorite.0.average_rating < 5 %}-o {% endif %}"></span>
-            
+          <div class="card">
+          <a href="{% url 'detail' favorite.0.id %}" class="stretched-link">
+            <div class="card-body">
+            <h3 class="card-title">{{favorite.0.title}}</h3>
+            <h4>
+              <span class="fa fa-star{% if favorite.0.average_rating < 1 %}-o {% endif %}"></span>
+              <span class="fa fa-star{% if favorite.0.average_rating < 2 %}-o {% endif %}"></span>
+              <span class="fa fa-star{% if favorite.0.average_rating < 3 %}-o {% endif %}"></span>
+              <span class="fa fa-star{% if favorite.0.average_rating < 4 %}-o {% endif %}"></span>
+              <span class="fa fa-star{% if favorite.0.average_rating < 5 %}-o {% endif %}"></span>
+            </h4>
             {% if favorite.0.image %}
-        <img src="{{ favorite.0.image.url }}" class="img-responsive" style="width:100%" alt="Image"></h4>
+        <img src="{{ favorite.0.image.url }}" class="img-responsive" style="width:100%" alt="Image">
         {% endif %}
+        </div>
+      </a>
+      </div>
       </div>
       {% endfor %}
 
