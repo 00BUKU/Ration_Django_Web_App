@@ -54,11 +54,11 @@
                 {% for meal in meals|meal:m.0 %}
                 <tr class="each {{m.1}}">
                     {% with nutrition=meal.calculate_nutrition %}
-                    <td>{{ meal.recipe.title }} ({{ meal.servings }})</td>
-                    <td class="calorie text-right">{{ nutrition.calorie|floatformat:2 }}</td>
-                    <td class="carbohydrate text-right">{{ nutrition.carbohydrate|floatformat:2 }}</td>
-                    <td class="fat text-right">{{ nutrition.fat|floatformat:2 }}</td>
-                    <td class="protein text-right">{{ nutrition.protein|floatformat:2 }}</td>
+                    <td class="align-middle">{{ meal.recipe.title }} ({{ meal.servings }})</td>
+                    <td class="calorie text-right align-middle">{{ nutrition.calorie|floatformat:2 }}</td>
+                    <td class="carbohydrate text-right align-middle">{{ nutrition.carbohydrate|floatformat:2 }}</td>
+                    <td class="fat text-right align-middle">{{ nutrition.fat|floatformat:2 }}</td>
+                    <td class="protein text-right align-middle">{{ nutrition.protein|floatformat:2 }}</td>
                     <td><a href="{% url 'meal_delete' meal.id%}"><button class="btn btn-outline-primary">X</button></a></td>
                     {% endwith %}
                 </tr>
