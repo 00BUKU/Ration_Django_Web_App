@@ -133,7 +133,7 @@ class Meal(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     servings = models.FloatField(validators=[MinValueValidator(0.0)])
-    meal = meal = models.CharField(
+    meal = models.CharField(
 		max_length=1,
 		choices=MEALS, 
 		default=MEALS[0][0])

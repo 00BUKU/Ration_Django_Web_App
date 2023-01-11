@@ -12,7 +12,7 @@ import datetime
 import uuid
 import boto3
 
-from .forms import RegisterForm, ReviewForm, CreateRecipeForm
+from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm
 
 # Add these "constant" variables below the imports
 S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
@@ -203,8 +203,8 @@ def my_profile(request):
     date_dictionary[meal.date.strftime("%d/%m/%Y")] = date_dictionary.get(meal.date.strftime("%d/%m/%Y"), 0) + 1
   return render(request, 'profile/calendar.html', {'data': date_dictionary})
 
+@login_required
 def meal_log(request, date):
-
   date = str(date)
   year = int(date[4:8])
   month = int(date[2:4])
@@ -214,6 +214,12 @@ def meal_log(request, date):
   day_after=(parsed_date + datetime.timedelta(days=1)).strftime("%d%m%Y")
   meals = Meal.objects.filter(profile_id=request.user.profile.id, date=parsed_date)
   return render(request, 'profile/meal_log.html', {'date': parsed_date, 'meals': meals, 'day_before':day_before, 'day_after':day_after, 'M': MEALS})
+
+@login_required
+def meal_create(request, recipe_id):
+  recipe = Recipe.objects.get(id=recipe_id)
+  form = MealForm()
+  return render(request, 'meals/create.html', {'form':form, 'recipe':recipe})
 
 def signup(request):
   error_message = ''
