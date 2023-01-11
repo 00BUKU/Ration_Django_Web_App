@@ -95,12 +95,23 @@
            {% csrf_token %}
 
            <h3>Leave a review: </h3>
-           <h2><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if recipe.average_rating < 3 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if recipe.average_rating < 4 %}-o {% endif %}" ></span>
-            <span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h2>
-              </div>
+           {% for recipe in recipes %}
+           <div class="card">
+               <div class="card-body">
+                   <h5 class="card-title">{{ recipe.title }}</h5>
+                   <div class="rating">
+                       {% for i in recipe.get_star_rating %}
+                           <i class="fa fa-star"></i>
+                       {% endfor %}
+                       {% for i in recipe.get_star_rating|length %}
+                           <i class="fa fa-star"></i>
+                       {% endfor %}
+                   </div>
+                   <p class="card-text">{{ recipe.summary }}</p>
+                   <a href="{% url 'detail' recipe.id %}" class="btn btn-primary">View Recipe</a>
+               </div>
+           </div>
+       {% endfor %}
              </div>
            </div>
       <div class="field">
