@@ -6,13 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 from .models import Recipe, Review, Profile, Amount, Ingredient, Meal, SIZES, MEALS
 import datetime
 
 import uuid
 import boto3
 
-from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm
+from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm, ProfileForm, PasswordForm
 
 # Add these "constant" variables below the imports
 S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
@@ -288,8 +289,48 @@ def signup(request):
   return render(request, 'registration/signup.html', context)
 
 def profile_detail(request, user_id):
-    profile = Profile.objects.get(user_id=user_id) 
-    recipes = Recipe.objects.filter(user_id=user_id)
-    context = {'profile': profile, 'recipes': recipes}
-    return render(request, 'registration/user_profile.html', context)
+  profile = Profile.objects.get(user_id=user_id) 
+  recipes = Recipe.objects.filter(user_id=user_id)
+  context = {'profile': profile, 'recipes': recipes}
+  return render(request, 'registration/user_profile.html', context)
 
+@login_required
+def profile_update(request):
+  profile = Profile.objects.get(user_id=request.user.id)
+  user = User.objects.get(id=request.user.id)
+  if request.method == 'POST':
+    form = ProfileForm(request.POST)
+    if form.is_valid():
+      for key, value in form.cleaned_data.items():
+        setattr(profile, key, value)
+        setattr(user, key, value)
+      profile.save()
+      user.save()
+      return redirect('my_profile')
+    return redirect('profile_update')
+  else: 
+    data = {
+      'first_name': user.first_name,
+      'last_name': user.last_name,
+      'daily_calorie': profile.daily_calorie,
+      'daily_carbohydrate': profile.daily_carbohydrate,
+      'daily_fat': profile.daily_fat,
+      'daily_protein': profile.daily_protein,
+    }
+    form = ProfileForm(initial=data)
+  return render(request, 'registration/update.html', {'form': form})
+
+@login_required
+def change_password(request):
+  if request.method == 'POST':
+    form = PasswordForm(request.POST)
+    if form.is_valid():
+      user = User.objects.get(id=request.user.id)
+      for key, value in form.cleaned_data.items():
+        setattr(user, key, value)
+      user.save()
+      return redirect('my_profile')
+    return redirect('change_password')
+  else:
+    form = PasswordForm()
+    return render(request, 'registration/password.html', {'form':form})
