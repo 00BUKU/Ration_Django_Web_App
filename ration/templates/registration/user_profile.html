@@ -2,7 +2,12 @@
 {% block content %}
 <div class="row">
   <div class="col-sm-4">
-      <img src="#" class="card-img-top" alt="Image">
+    
+    {% if profile.image %}
+        <img src="{{profile.image.url }}" class="card-img-top" alt="">
+    {% endif %}
+        
+      
 
       <h1>{{ profile.user.username }}</h1>
 
