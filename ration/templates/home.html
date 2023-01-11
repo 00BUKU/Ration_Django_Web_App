@@ -13,11 +13,11 @@
 
   <div class="container-fluid bg-3 text-center">    
     <h3>The Favorites</h3><br>
-    <div class="row">
+    <div class="row mb-4">
       
       {% for favorite in top_favorites %}
         
-        <div class="col-sm-3">
+        <div class="col-sm-4">
           <div class="card">
           <a href="{% url 'detail' favorite.0.id %}" class="stretched-link">
             <div class="card-body">
