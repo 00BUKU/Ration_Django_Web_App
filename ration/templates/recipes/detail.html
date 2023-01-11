@@ -92,7 +92,7 @@
   <form method="post" action="{% url 'add_review' recipe.id %}">
            {% csrf_token %}
 
-          <h3>Leave a review: </h3>
+           <h3>Leave a review: </h3>
           <div  class="control">
               <div class="select">
                   <div>Rating: </div>
@@ -104,8 +104,8 @@
                       <option value="5">5</option>
                   </select>
               </div>
-          </div>
-      </div>
+             </div>
+           </div>
       <div class="field">
           <label>Comment</label>
           <div class="control">
