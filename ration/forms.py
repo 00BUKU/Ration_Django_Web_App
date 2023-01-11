@@ -25,7 +25,7 @@ class CreateRecipeForm(forms.Form):
     servings = forms.IntegerField(min_value=1)
 
 class MealForm(forms.Form):
-    servings = forms.FloatField(min_value=0)
+    servings = forms.FloatField(min_value=0, initial=1.0)
     date = forms.DateField(initial=datetime.date.today)
     meal = forms.ChoiceField(choices=MEALS)
 
