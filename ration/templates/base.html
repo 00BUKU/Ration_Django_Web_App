@@ -26,7 +26,8 @@
           <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" href='#' role="button" aria-haspopup="true" aria-expanded="false">Recipes</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'index' %}">Recipes List</a></li>
-              <li><a class="dropdown-item" href="{% url 'recipe_create' %}">Add Recipe</a></li>
+              <li><a class="dropdown-item" href="{% url 'recipe_create' %}"><i class="fa fa-plus" aria-hidden="true"></i>
+                Add Recipe</a></li>
             </ul>
           </li>
           {% if user.is_authenticated %}

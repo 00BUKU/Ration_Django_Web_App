@@ -24,6 +24,19 @@ class ReviewForm(forms.Form):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
+class ProfileForm(forms.Form):
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    daily_calorie = forms.FloatField(min_value=0)
+    daily_carbohydrate = forms.FloatField(min_value=0)
+    daily_fat = forms.FloatField(min_value=0)
+    daily_protein = forms.FloatField(min_value=0)
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
 class CreateRecipeForm(forms.Form):
     title = forms.CharField(max_length=50)
     summary = forms.CharField(widget=forms.Textarea,max_length=500)

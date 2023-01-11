@@ -2,16 +2,46 @@
 {% block content %}
 <div class="row">
   <div class="col-sm-4">
-      <img src="#" class="card-img-top" alt="Image">
+    
+    {% if profile.image %}
+        <img src="{{profile.image.url }}" class="card-img-top" alt="">
+    {% endif %}
+        
+      
 
       <h1>{{ profile.user.username }}</h1>
 
     <p>Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
     <p>Email: {{ profile.user.email }}</p>
     <hr>
+    
+    {% if profile.user == request.user %}
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Settings
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="{% url 'profile_update' %}">Update Profile</a>
+          <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+        </div>
+      </div>
+    {% endif %}
+        
   </div>
-    <div class="col-sm-8">
-      <div> My favorite recipes: </div>
+  <div class="col-sm-4">
+    <h5>My Recipes:</h5>
+    <ul>
+        {% for recipe in recipes %}
+          <li><a href="{% url 'detail' recipe.id %}">{{ recipe.title }}</a></li>
+      {% empty %}
+       <div class="notification space-below">
+        No recipes.
+      </div>
+    {% endfor %}
+  </ul>
+  </div>
+    <div class="col-sm-4">
+      <h5>Favorite Recipes: </h5>
       <ul>
         {% for favorite in profile.favorites.all %}
           <li><a href="{% url 'detail' favorite.id %}">{{ favorite.title }}</a></li>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Update Information</h1>
+
+{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+
+<!-- Add the login form -->
+<form method="post" action="" %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" class="btn btn-light" value="Update Profile">
+</form>
+
+{% endblock %}
