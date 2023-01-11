@@ -37,14 +37,6 @@ class ProfileForm(forms.Form):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
-class PasswordForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput())
-
-    def __init__(self, *args, **kwargs):
-        super(PasswordForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
 class CreateRecipeForm(forms.Form):
     title = forms.CharField(max_length=50)
     summary = forms.CharField(widget=forms.Textarea,max_length=500)

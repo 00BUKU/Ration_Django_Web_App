@@ -13,7 +13,10 @@ import datetime
 import uuid
 import boto3
 
-from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm, ProfileForm, PasswordForm
+from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm, ProfileForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 # Add these "constant" variables below the imports
 S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
@@ -322,15 +325,17 @@ def profile_update(request):
 
 @login_required
 def change_password(request):
-  if request.method == 'POST':
-    form = PasswordForm(request.POST)
-    if form.is_valid():
-      user = User.objects.get(id=request.user.id)
-      for key, value in form.cleaned_data.items():
-        setattr(user, key, value)
-      user.save()
-      return redirect('my_profile')
-    return redirect('change_password')
-  else:
-    form = PasswordForm()
-    return render(request, 'registration/password.html', {'form':form})
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('my_profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/password.html', {
+        'form': form
+    })
