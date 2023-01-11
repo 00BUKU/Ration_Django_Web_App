@@ -141,4 +141,9 @@ class Meal(models.Model):
 
     def __str__(self):
         return f"{self.get_meal_display()} of {self.servings} servings {self.recipe.title} on {self.date}"
-
+    
+    def calculate_nutrition(self):
+        nutrition = self.recipe.calculate_nutrition()
+        for key, value in nutrition.items():
+            nutrition[key] = value*self.servings
+        return nutrition
