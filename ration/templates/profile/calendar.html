@@ -2,6 +2,7 @@
 
 
 {% block content %}
+    <h1 class="text-center">Nutrition Tracker</h1>
 <div class="d-flex">
   <div class="wrapper">
     <div class="container-calendar">
@@ -10,7 +11,7 @@
             <button id="previous" onclick="previous()">&#8249;</button>
             <button id="next" onclick="next()">&#8250;</button>
         </div>
-        <table class="table-calendar" id="calendar" data-lang="en">
+        <table class="table-calendar" id="calendar">
             <thead id="thead-month"></thead>
             <tbody id="calendar-body"></tbody>
         </table>
@@ -34,29 +35,31 @@
         </div>
     </div>
   </div>
-    <div class="container my-auto">
-      <div class="row text-center"><div class="col-sm">Daily Nutrition</div></div>
+  <div class="wrapper">
+    <div class="container">
+      <div class="row text-center"><div class="col-sm"><h3>Daily Nutrition</h3></div></div>
       <div class="row">
-        <div class="col-sm">Calories:</div>
-        <div class="col-sm">Carbohydrate:</div>
-        <div class="col-sm">Fat:</div>
-        <div class="col-sm">Protein:</div>
+        <div class="col-sm-3"><h5>Calories:</h5></div>
+        <div class="col-sm-3"><h5>Carbs:</h5></div>
+        <div class="col-sm-3"><h5>Fat:</h5></div>
+        <div class="col-sm-3"><h5>Protein:</h5></div>
       </div>
       <div class="row">
-        <div class="col-sm">
+        <div class="col-sm-3">
           {{ user.profile.daily_calorie }}
         </div>
-          <div class="col-sm">
+          <div class="col-sm-3">
           {{ user.profile.daily_carbohydrate }}
         </div>
-          <div class="col-sm">
+          <div class="col-sm-3">
           {{ user.profile.daily_fat }}
         </div>
-          <div class="col-sm">
+          <div class="col-sm-3">
           {{ user.profile.daily_protein }}
         </div>
       </div>
     </div>
+  </div>
   </div>
   {{ data|json_script:"my_data"}}
 
