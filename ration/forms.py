@@ -15,9 +15,12 @@ class RegisterForm(UserCreationForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
-class ReviewForm(forms.Form):
+class ReviewForm(forms.ModelForm):
     rating = forms.ChoiceField(choices=((1,1),(2,2),(3,3),(4,4),(5,5)))
     comment = forms.CharField(max_length=250)
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
 
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
