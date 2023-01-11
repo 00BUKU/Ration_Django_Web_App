@@ -117,7 +117,7 @@ class Profile(models.Model):
                 favorites_dictionary[favorite.recipe] = 1
             else:
                 favorites_dictionary[favorite.recipe] += 1
-        return sorted(favorites_dictionary.items(), key=operator.itemgetter(1),reverse=True)[:4]
+        return sorted(favorites_dictionary.items(), key=operator.itemgetter(1),reverse=True)[:3]
 
 class Review(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
