@@ -7,6 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 import operator
+import datetime
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=50)
@@ -32,6 +33,7 @@ class Recipe(models.Model):
     servings = models.IntegerField(validators=[MinValueValidator(1)])
     ingredient = models.ManyToManyField(Ingredient, through='Amount')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def average_rating(self) -> float:
         return Review.objects.filter(recipe=self).aggregate(Avg("rating"))["rating__avg"] or 0
@@ -79,11 +81,24 @@ class Amount(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, upload_to=None)
+    image = models.ImageField(null=True, blank=True, upload_to="profile/")
     favorites = models.ManyToManyField(Recipe, blank=True)
 
     def __str__(self):
         return self.user.username
+
+    def get_daily_nutrition(self, day, month, year):
+        date = datetime.datetime(year, month, day)
+        daily_meals = self.meal_set.filter(date=date)
+        daily_nutrition = {}
+        for meal in daily_meals:
+            for nutrient, value in meal.recipe.calculate_nutrition().items():
+                daily_nutrition[nutrient] = value + daily_nutrition.get(nutrient, 0)
+    
+    def fed_for_day(self, day, month, year):
+        date = datetime.datetime(year, month, day)
+        return self.meal_set.filter(date=date).count() >= len(MEALS) - 1
+
 
     @classmethod
     def count_favorites(cls):
@@ -107,4 +122,23 @@ class Review(models.Model):
         models.UniqueConstraint(fields=['recipe', 'user'], name='unique_review_per_user')
     ]
 
+MEALS = (
+	('B', 'Breakfast'),
+	('L', 'Lunch'),
+	('D', 'Dinner'),
+    ('S', 'Snack'),
+)
+
+class Meal(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    servings = models.FloatField(validators=[MinValueValidator(0.0)])
+    meal = meal = models.CharField(
+		max_length=1,
+		choices=MEALS, 
+		default=MEALS[0][0])
+    date = models.DateField('Meal date')
+
+    def __str__(self):
+        return f"{self.get_meal_display()} of {self.servings} servings {self.recipe.title} on {self.date}"
 

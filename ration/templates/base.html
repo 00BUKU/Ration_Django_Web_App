@@ -32,6 +32,11 @@
           {% if user.is_authenticated %}
 
             <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item dropdown"><a  class="dropdown-toggle nav-link" data-toggle="dropdown" href='#' role="button" aria-haspopup="true" aria-expanded="false"> My Account</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">My profile</a></li>
+                <li><a class="dropdown-item" href="#">Food diary</a></li></li>
+              </ul>
               <li><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
           {% else %}
               <li><a class="nav-link" href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -51,7 +56,7 @@
     {% endblock %}
   </main>
 
-  <footer class="container-fluid text-center ">
+  <footer class="container-fluid text-sm-center ">
     <p>© 2023 Copyright ration.App</p>
   </footer>
 
