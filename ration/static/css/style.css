@@ -193,16 +193,26 @@ h2{
 
 #previous {
     float: left;
+    background-color: #28a745;
 }
 
 #next {
     float: right;
+    background-color:#28a745
 }
 
 .footer-container-calendar {
     margin-top: 1em;
     border-top: 1px solid #dadada;
     padding: 10px 0;
+}
+
+.nutrition {
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #63da7f;
+  margin-top: 0;
+  color: black;
 }
 
 .footer-container-calendar select {
