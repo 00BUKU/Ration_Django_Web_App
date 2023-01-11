@@ -36,8 +36,12 @@
   {{ data|json_script:"my_data"}}
   <script>
     $(document).ready(function($) {
-    $(".date-picker").click(function() {
-        window.document.location = `${window.location.href}/${$(this).data("href")}`;
+    $("#calendar-body").click(function() {
+      if (event.target.classList.contains("date-picker")) {
+        window.document.location = `${window.location.href}/${event.target.getAttribute("data-href")}`;
+      } else if (event.target.tagName.toLowerCase() == 'span') {
+        window.document.location = `${window.location.href}/${event.target.parentNode.getAttribute("data-href")}`;
+      }
     });
 });
 
