@@ -42,14 +42,14 @@
                     <li>Cooking time: {{ recipe.cooking_minutes }}</li>
                     <li>Servings: {{ recipe.servings }}</li>
                     <hr />
-                    <li><h4>Ingredients:</h4><ul>
+                    <li><h4>Ingredients:</h4><ul class="list-unstyled">
                     {% for ingredient in ingredients %}
                         <li>{{ingredient.amount}} {{ ingredient.get_size_display }}s: {{ ingredient.ingredient.name }}</li>
                     {% endfor %}
                          </ul></li>
                          <hr />
                     <li><h4>Directions:</h4></li>
-                    <li class="prewrap text-left">{{ recipe.directions }} {{ average_rating }}</li>
+                    <li id="directions" class="prewrap text-left">{{ recipe.directions }} {{ average_rating }}</li>
                 </ul>
                 {% if recipe.user == user %}
                     <a href="{% url 'update' recipe.id %}"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Edit</button></a>
@@ -95,23 +95,31 @@
            {% csrf_token %}
 
            <h3>Leave a review: </h3>
-           <h2><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if recipe.average_rating < 3 %}-o {% endif %}"></span>
-            <span class="fa fa-star{% if recipe.average_rating < 4 %}-o {% endif %}" ></span>
-            <span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h2>
-              </div>
-             </div>
-           </div>
+          <div class="control">
+            <div class="select">
+                <label>Rating:</label>
+            </div>
+            <select class="form-control" name="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+          </div>
+            
+          </select>
+          </div>
       <div class="field">
           <label>Comment</label>
           <div class="control">
-              <textarea class="textarea" name="comment"> </textarea>
+              <textarea class="textarea form-control" name="comment"></textarea>
           </div>
       </div>
+      <br />
       <div class="field">
           <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="btn btn-light is-success">Submit</button>
           </div>
       </div>
   </form>
@@ -139,19 +147,18 @@
        <strong> Reviewer: </strong>
             <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}</a>
         </p>
-        {% if request.user.is_authenticated %} 
-        
+        {% if review.user == request.user %} 
+        <div class="d-flex">
         <form method="POST" action="{% url 'update_review' review.id %}">
             {% csrf_token %}
-            <button type="submit" class="btn" value="Delete">Edit</button>
+            <button type="submit" class="btn" value="Edit">Edit</button>
         </form>
         
         <form action ="{% url 'remove_review' recipe.id review.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" class="btn" value="Delete">Delete</button>
         </form>
-        {% else %}
-        <p> You didn't add a review! You need to signup to add and edit a review! </p>
+        </div>
         {% endif%}
 
     </div>
@@ -168,6 +175,8 @@
 <script>
 // jquery function
     $(document).ready(() => {
+        $('#directions').text($('#directions').text().replace(/\n/g, '\n\n'))
+
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'pie',

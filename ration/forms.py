@@ -10,10 +10,19 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ["username", "email", "first_name", "last_name", "password1", "password2",] 
 
-class ReviewForm(ModelForm):
-    class Meta:
-        model = Review
-        fields = ['rating', 'comment']
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+class ReviewForm(forms.Form):
+    rating = forms.ChoiceField(choices=((1,1),(2,2),(3,3),(4,4),(5,5)))
+    comment = forms.CharField(max_length=250)
+
+    def __init__(self, *args, **kwargs):
+        super(ReviewForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 class CreateRecipeForm(forms.Form):
     title = forms.CharField(max_length=50)
@@ -24,9 +33,20 @@ class CreateRecipeForm(forms.Form):
     image = forms.ImageField(required=False)
     servings = forms.IntegerField(min_value=1)
 
+    def __init__(self, *args, **kwargs):
+        super(CreateRecipeForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+
 class MealForm(forms.Form):
     servings = forms.FloatField(min_value=0, initial=1.0)
     date = forms.DateField(initial=datetime.date.today)
     meal = forms.ChoiceField(choices=MEALS)
+
+    def __init__(self, *args, **kwargs):
+        super(MealForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
     

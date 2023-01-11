@@ -188,10 +188,26 @@ def add_review(request, recipe_id):
     new_review.save()
   return redirect('detail', recipe_id=recipe_id)
 
-class ReviewUpdate(UpdateView):
-  model = Review
-  template_name= 'update_review.html'
-  fields = ['rating', 'comment']
+@login_required
+def update_review(request, review_id):
+  if request.method == "POST":
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+      review = Review.objects.get(id=review_id)
+      for key, value in form.cleaned_data.items():
+        setattr(review, key, value)
+      review.save() 
+      return redirect('detail', review.recipe_id)
+    return redirect('update_review', review_id)
+  else:
+    review = Review.objects.get(id=review_id)
+    data = {
+      "rating": review.rating,
+      "comment": review.comment,
+    }
+    form = ReviewForm(initial=data)
+    context = {'form':form}
+    return render(request, 'reviews/update.html', context)
   
 def remove_review(request, review_id, recipe_id):
   

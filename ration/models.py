@@ -38,6 +38,9 @@ class Recipe(models.Model):
     def average_rating(self) -> float:
         return Review.objects.filter(recipe=self).aggregate(Avg("rating"))["rating__avg"] or 0
 
+    def get_star_rating(self):
+        return range(0, int(self.average_rating()))
+
     def calculate_nutrition(self):
         nutrient = {}
         for ingredient in Amount.objects.filter(recipe=self):
@@ -82,7 +85,12 @@ class Amount(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True, upload_to="profile/")
+    daily_calorie = models.FloatField(default=2000.0, validators=[MinValueValidator(0.0)])
+    daily_carbohydrate = models.FloatField(default=300.0, validators=[MinValueValidator(0.0)])
+    daily_fat = models.FloatField(default=65.0, validators=[MinValueValidator(0.0)])
+    daily_protein = models.FloatField(default=50.0, validators=[MinValueValidator(0.0)])
     favorites = models.ManyToManyField(Recipe, blank=True)
+    
 
     def __str__(self):
         return self.user.username
@@ -109,7 +117,7 @@ class Profile(models.Model):
                 favorites_dictionary[favorite.recipe] = 1
             else:
                 favorites_dictionary[favorite.recipe] += 1
-        return sorted(favorites_dictionary.items(), key=operator.itemgetter(1),reverse=True)[:4]
+        return sorted(favorites_dictionary.items(), key=operator.itemgetter(1),reverse=True)[:3]
 
 class Review(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
