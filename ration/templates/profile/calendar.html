@@ -3,8 +3,8 @@
 
 {% block content %}
     <h1 class="text-center">Nutrition Tracker</h1>
-<div class="d-flex">
-  <div class="wrapper">
+<div class="row">
+  <div class="col-sm-5">
     <div class="container-calendar">
         <h3 id="monthAndYear"></h3>
         <div class="button-container-calendar">
@@ -35,15 +35,18 @@
         </div>
     </div>
   </div>
-  <div class="wrapper">
-    <div class="container">
-      <div class="row text-center"><div class="col-sm"><h3>Daily Nutrition</h3></div></div>
-      <div class="row">
-        <div class="col-sm-3"><h5>Calories:</h5></div>
-        <div class="col-sm-3"><h5>Carbs:</h5></div>
-        <div class="col-sm-3"><h5>Fat:</h5></div>
-        <div class="col-sm-3"><h5>Protein:</h5></div>
-      </div>
+  <div class="col-sm-7">
+    <div class="card bg-success text-white">
+      <div class="card-body">
+        <h3 class="card-title text-center">Daily Nutrition</h3></div>
+        <div class="nutrition">
+        <div class="row">
+          <div class="col-sm-3"><h5>Calories:</h5></div>
+          <div class="col-sm-3"><h5>Carbs:</h5></div>
+          <div class="col-sm-3"><h5>Fat:</h5></div>
+          <div class="col-sm-3"><h5>Protein:</h5></div>
+        </div>
+      
       <div class="row">
         <div class="col-sm-3">
           {{ user.profile.daily_calorie }}
@@ -58,7 +61,10 @@
           {{ user.profile.daily_protein }}
         </div>
       </div>
+      </div>
+      </div>
     </div>
+  </div>
   </div>
   </div>
   {{ data|json_script:"my_data"}}
