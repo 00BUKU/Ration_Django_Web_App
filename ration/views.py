@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
 from django.http import HttpResponse
-from .models import Recipe, Review, Profile, Amount, Ingredient, SIZES
-from django.db.models import Q
+from .models import Recipe, Review, Profile, Amount, Ingredient, Meal, SIZES
+import datetime
 
 import uuid
 import boto3
@@ -197,7 +197,11 @@ def remove_review(request, review_id, recipe_id):
 
 @login_required
 def my_profile(request):
-  return render(request, 'profile/calendar.html')
+  meals = Meal.objects.filter(profile_id=request.user.profile.id)
+  date_dictionary = {}
+  for meal in meals:
+    date_dictionary[meal.date.strftime("%d/%m/%Y")] = date_dictionary.get(meal.date.strftime("%d/%m/%Y"), 0) + 1
+  return render(request, 'profile/calendar.html', {'data': date_dictionary})
 
 def signup(request):
   error_message = ''
