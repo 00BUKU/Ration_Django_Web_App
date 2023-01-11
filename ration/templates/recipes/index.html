@@ -41,7 +41,6 @@
 {% with nutrition=recipe.calculate_nutrition rating=recipe.average_rating%}
 
 <div class=""> 
-	<div class ="col-sm-6">
 	<div class="card recipe mb-3" data-title="{{ recipe.title }}" data-rating="{{ rating }} "
 
 	{% for key, value in nutrition.items %}
@@ -62,7 +61,6 @@
 			<span class="fa fa-star{% if rating < 5 %}-o {% endif %}"></span></h5>
 		<p class="card-text">{{ recipe.summary }}</p>
 		</div>
-	</div>
 	</div>
 </div>
 {% endwith %}	
