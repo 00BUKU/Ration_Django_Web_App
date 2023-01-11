@@ -203,6 +203,15 @@ def my_profile(request):
     date_dictionary[meal.date.strftime("%d/%m/%Y")] = date_dictionary.get(meal.date.strftime("%d/%m/%Y"), 0) + 1
   return render(request, 'profile/calendar.html', {'data': date_dictionary})
 
+def meal_log(request, date):
+  date = str(date)
+  year = int(date[4:8])
+  month = int(date[2:4])
+  day = int(date[:2])
+  parsed_date = datetime.datetime(year, month, day)
+  meals = Meal.objects.filter(profile_id=request.user.profile.id, date=parsed_date)
+  return render(request, 'profile/meal_log.html', {'meals': meals})
+
 def signup(request):
   error_message = ''
   if request.method == 'POST':

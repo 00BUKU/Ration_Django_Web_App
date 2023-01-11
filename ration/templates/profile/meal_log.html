@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    {% for meal in meals %}
+        {{meal}} {{ meal.recipe.calculate_nutrition }}
+    {% endfor %}
+        
+{% endblock content %}
+    
