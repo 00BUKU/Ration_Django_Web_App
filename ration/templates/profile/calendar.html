@@ -2,6 +2,7 @@
 
 
 {% block content %}
+<div class="d-flex">
   <div class="wrapper">
     <div class="container-calendar">
         <h3 id="monthAndYear"></h3>
@@ -33,7 +34,33 @@
         </div>
     </div>
   </div>
+    <div class="container my-auto">
+      <div class="row text-center"><div class="col-sm">Daily Nutrition</div></div>
+      <div class="row">
+        <div class="col-sm">Calories:</div>
+        <div class="col-sm">Carbohydrate:</div>
+        <div class="col-sm">Fat:</div>
+        <div class="col-sm">Protein:</div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          {{ user.profile.daily_calorie }}
+        </div>
+          <div class="col-sm">
+          {{ user.profile.daily_carbohydrate }}
+        </div>
+          <div class="col-sm">
+          {{ user.profile.daily_fat }}
+        </div>
+          <div class="col-sm">
+          {{ user.profile.daily_protein }}
+        </div>
+      </div>
+    </div>
+  </div>
   {{ data|json_script:"my_data"}}
+
+
   <script>
     $(document).ready(function($) {
     $("#calendar-body").click(function() {
