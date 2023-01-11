@@ -164,7 +164,7 @@ function showCalendar(month, year) {
                   cell.classList.add("filled")
                 }
                 if ( date === today.getDate() && year === today.getFullYear() && month === today.getMonth() ) {
-                    cell.className = "date-picker selected";
+                    cell.classList.add("selected");
                 }
                 row.appendChild(cell);
                 date++;

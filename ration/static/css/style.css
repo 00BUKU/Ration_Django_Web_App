@@ -224,3 +224,15 @@ h2{
 .complete {
   background-color: green;
 }
+
+.column_name {
+  width: 55%;
+}
+
+.column_info {
+  width: 15%;
+}
+
+.column_delete {
+  width: 8%;
+}

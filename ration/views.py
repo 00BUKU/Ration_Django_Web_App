@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
 from django.http import HttpResponse
-from .models import Recipe, Review, Profile, Amount, Ingredient, Meal, SIZES
+from .models import Recipe, Review, Profile, Amount, Ingredient, Meal, SIZES, MEALS
 import datetime
 
 import uuid
@@ -204,13 +204,16 @@ def my_profile(request):
   return render(request, 'profile/calendar.html', {'data': date_dictionary})
 
 def meal_log(request, date):
+
   date = str(date)
   year = int(date[4:8])
   month = int(date[2:4])
   day = int(date[:2])
-  parsed_date = datetime.datetime(year, month, day)
+  parsed_date = datetime.datetime(year, month, day).date()
+  day_before=(parsed_date - datetime.timedelta(days=1)).strftime("%d%m%Y")
+  day_after=(parsed_date + datetime.timedelta(days=1)).strftime("%d%m%Y")
   meals = Meal.objects.filter(profile_id=request.user.profile.id, date=parsed_date)
-  return render(request, 'profile/meal_log.html', {'meals': meals})
+  return render(request, 'profile/meal_log.html', {'date': parsed_date, 'meals': meals, 'day_before':day_before, 'day_after':day_after, 'M': MEALS})
 
 def signup(request):
   error_message = ''
