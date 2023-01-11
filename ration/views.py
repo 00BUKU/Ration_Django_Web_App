@@ -238,6 +238,13 @@ def meal_create(request, recipe_id):
     form = MealForm()
   return render(request, 'meals/create.html', {'form':form, 'recipe':recipe})
 
+@login_required
+def meal_delete(request, meal_id):
+  meal = Meal.objects.get(id=meal_id, profile_id=request.user.profile.id)
+  date = meal.date.strftime("%d%m%Y")
+  meal.delete()
+  return redirect('meal_log', date)
+
 def signup(request):
   error_message = ''
   if request.method == 'POST':

@@ -59,7 +59,7 @@
                     <td class="carbohydrate">{{ nutrition.carbohydrate|floatformat:2 }}</td>
                     <td class="fat">{{ nutrition.fat|floatformat:2 }}</td>
                     <td class="protein">{{ nutrition.protein|floatformat:2 }}</td>
-                    <td></td>
+                    <td><a href="{% url 'meal_delete' meal.id%}"><button class="btn">X</button></a></td>
                     {% endwith %}
                 </tr>
                 {% endfor %}
@@ -102,7 +102,7 @@
                     $(`.each.${m} > .${v}`).each(function() {
                         value += parseFloat($(this).text());
                     })
-                    $(`.total.${m} > .${v}` ).text(value)
+                    $(`.total.${m} > .${v}` ).text(value.toFixed(2));
                 })
 
             })
@@ -111,7 +111,7 @@
                 $(`.total > .${v}`).each(function() {
                     value += parseFloat($(this).text());
                 })
-                $(`.total-daily > .${v}`).text(value)
+                $(`.total-daily > .${v}`).text(value.toFixed(2));
             })
 
             const ctx = document.getElementById('myChart').getContext('2d');

@@ -22,4 +22,5 @@ urlpatterns = [
     path('members/profile/<int:date>', views.meal_log, name='meal_log'),
     path('meals', views.meal_search, name='meal_search'),
     path('meals/<int:recipe_id>/create', views.meal_create, name='meal_create'),
+    path('meals/delete/<int:meal_id>', views.meal_delete, name="meal_delete"),
 ]
