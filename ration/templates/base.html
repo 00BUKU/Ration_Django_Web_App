@@ -32,10 +32,11 @@
           {% if user.is_authenticated %}
 
             <ul class="nav navbar-nav navbar-right">
-              <li class="nav-item dropdown"><a  class="dropdown-toggle nav-link" data-toggle="dropdown" href='#' role="button" aria-haspopup="true" aria-expanded="false"> My Account</a>
+              <li class="nav-item dropdown"><a  class="dropdown-toggle nav-link" data-toggle="dropdown" href='#' role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>
+                My Account</a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">My profile</a></li>
-                <li><a class="dropdown-item" href="#">Food diary</a></li></li>
+                <li><a class="dropdown-item" href="{% url 'profile_detail' user.id %}">My Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'my_profile' %}">Meal Log</a></li></li>
               </ul>
               <li><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
           {% else %}

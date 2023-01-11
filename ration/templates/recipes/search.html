@@ -8,7 +8,7 @@
         {% for recipe in recipes %}
         <div class="card">
             <a href="{% url 'detail' recipe.id %}" class="stretched-link">
-            {% if recip.image %}
+            {% if recipe.image %}
                 <img src="{{ recipe.image.url }}" alt="recipe image cap" class="card-img-top">
             {% endif %}
                 </a>
