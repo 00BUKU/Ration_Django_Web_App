@@ -2,7 +2,8 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Review, Ingredient, Amount
+from .models import Review, Ingredient, Amount, MEALS
+import datetime
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -23,5 +24,9 @@ class CreateRecipeForm(forms.Form):
     image = forms.ImageField(required=False)
     servings = forms.IntegerField(min_value=1)
 
+class MealForm(forms.Form):
+    servings = forms.FloatField(min_value=0, initial=1.0)
+    date = forms.DateField(initial=datetime.date.today)
+    meal = forms.ChoiceField(choices=MEALS)
 
     

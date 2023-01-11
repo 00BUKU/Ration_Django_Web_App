@@ -12,7 +12,7 @@ import datetime
 import uuid
 import boto3
 
-from .forms import RegisterForm, ReviewForm, CreateRecipeForm
+from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm
 
 # Add these "constant" variables below the imports
 S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
@@ -203,8 +203,8 @@ def my_profile(request):
     date_dictionary[meal.date.strftime("%d/%m/%Y")] = date_dictionary.get(meal.date.strftime("%d/%m/%Y"), 0) + 1
   return render(request, 'profile/calendar.html', {'data': date_dictionary})
 
+@login_required
 def meal_log(request, date):
-
   date = str(date)
   year = int(date[4:8])
   month = int(date[2:4])
@@ -214,6 +214,36 @@ def meal_log(request, date):
   day_after=(parsed_date + datetime.timedelta(days=1)).strftime("%d%m%Y")
   meals = Meal.objects.filter(profile_id=request.user.profile.id, date=parsed_date)
   return render(request, 'profile/meal_log.html', {'date': parsed_date, 'meals': meals, 'day_before':day_before, 'day_after':day_after, 'M': MEALS})
+
+@login_required
+def meal_search(request):
+  recipes = Recipe.objects.all()
+  return render(request, 'meals/search.html', {'recipes': recipes})
+
+@login_required
+def meal_create(request, recipe_id):
+  if request.method == 'POST':
+    form = MealForm(request.POST)
+    if form.is_valid():
+      new_meal = Meal()
+      for key, value in form.cleaned_data.items():
+        setattr(new_meal, key, value)
+      new_meal.profile_id = request.user.profile.id
+      new_meal.recipe_id = recipe_id
+      new_meal.save()
+      date = new_meal.date.strftime("%d%m%Y")
+      return redirect('meal_log', date)
+  else:
+    recipe = Recipe.objects.get(id=recipe_id)
+    form = MealForm()
+  return render(request, 'meals/create.html', {'form':form, 'recipe':recipe})
+
+@login_required
+def meal_delete(request, meal_id):
+  meal = Meal.objects.get(id=meal_id, profile_id=request.user.profile.id)
+  date = meal.date.strftime("%d%m%Y")
+  meal.delete()
+  return redirect('meal_log', date)
 
 def signup(request):
   error_message = ''

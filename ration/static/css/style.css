@@ -97,7 +97,6 @@ h2{
   letter-spacing: 2.5px;
   font-family: 'Nunito', sans-serif;
   box-shadow: none !important;
-  border: 0;
   padding: 10px 20px !important;
 }
 .btn:focus{

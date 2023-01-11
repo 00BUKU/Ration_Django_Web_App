@@ -35,6 +35,7 @@
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>Created by: <a href="{% url 'profile_detail' recipe.user.id %}">{{ recipe.user }}</a></li>
                     <li>Date added: {{ recipe.date_added|date:"Y-m-d" }}</li> <hr />
+                    <a href="{% url 'meal_create' recipe.id%}"><button class="btn">Log Meal</button></a>
                     <li class="prewrap">{{ recipe.summary }}</li>
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>Preparation time: {{ recipe.preparation_minutes }}</li>
