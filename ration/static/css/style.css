@@ -75,7 +75,7 @@ bottom: .5em;
 }
 
 .prewrap {
-  white-space: pre-wrap
+  white-space: pre-wrap;
 }
 
 .card{
@@ -234,4 +234,12 @@ h2{
 
 .column_delete {
   width: 8%;
+}
+
+.column_ingredient {
+  width: 30%;
+}
+
+.column_data {
+  width: 15%;
 }
