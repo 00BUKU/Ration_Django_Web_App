@@ -222,8 +222,20 @@ def meal_search(request):
 
 @login_required
 def meal_create(request, recipe_id):
-  recipe = Recipe.objects.get(id=recipe_id)
-  form = MealForm()
+  if request.method == 'POST':
+    form = MealForm(request.POST)
+    if form.is_valid():
+      new_meal = Meal()
+      for key, value in form.cleaned_data.items():
+        setattr(new_meal, key, value)
+      new_meal.profile_id = request.user.profile.id
+      new_meal.recipe_id = recipe_id
+      new_meal.save()
+      date = new_meal.date.strftime("%d%m%Y")
+      return redirect('meal_log', date)
+  else:
+    recipe = Recipe.objects.get(id=recipe_id)
+    form = MealForm()
   return render(request, 'meals/create.html', {'form':form, 'recipe':recipe})
 
 def signup(request):
