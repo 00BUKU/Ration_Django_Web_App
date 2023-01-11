@@ -1,19 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="row">
+  <div class="col-sm-4">
+      <img src="#" class="card-img-top" alt="Image">
 
-<h1>{{ profile.user.username }}</h1>
+      <h1>{{ profile.user.username }}</h1>
 
-<p>Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
-<p>Email: {{ profile.user.email }}</p>
-
-<ul>
-    {% for favorite in profile.favorites.all %}
-        <li><a href="{% url 'detail' favorite.id %}">{{ favorite.title }}</a></li>
-    {% empty %}
-      <div class="notification space-below">
+    <p>Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+    <p>Email: {{ profile.user.email }}</p>
+    <hr>
+  </div>
+    <div class="col-sm-8">
+      <div> My favorite recipes: </div>
+      <ul>
+        {% for favorite in profile.favorites.all %}
+          <li><a href="{% url 'detail' favorite.id %}">{{ favorite.title }}</a></li>
+      {% empty %}
+       <div class="notification space-below">
         No favorites.
       </div>
     {% endfor %}
-</ul>
+  </ul>
+</div>
+</div>
 
 {% endblock %}
