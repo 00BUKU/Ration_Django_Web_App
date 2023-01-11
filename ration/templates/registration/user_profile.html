@@ -10,8 +10,20 @@
     <p>Email: {{ profile.user.email }}</p>
     <hr>
   </div>
-    <div class="col-sm-8">
-      <div> My favorite recipes: </div>
+  <div class="col-sm-4">
+    <h5>My Recipes:</h5>
+    <ul>
+        {% for recipe in recipes %}
+          <li><a href="{% url 'detail' recipe.id %}">{{ recipe.title }}</a></li>
+      {% empty %}
+       <div class="notification space-below">
+        No recipes.
+      </div>
+    {% endfor %}
+  </ul>
+  </div>
+    <div class="col-sm-4">
+      <h5>Favorite Recipes: </h5>
       <ul>
         {% for favorite in profile.favorites.all %}
           <li><a href="{% url 'detail' favorite.id %}">{{ favorite.title }}</a></li>

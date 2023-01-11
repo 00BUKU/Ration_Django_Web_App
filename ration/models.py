@@ -107,7 +107,6 @@ class Profile(models.Model):
         date = datetime.datetime(year, month, day)
         return self.meal_set.filter(date=date).count() >= len(MEALS) - 1
 
-
     @classmethod
     def count_favorites(cls):
         favorites = cls.favorites.through.objects.all()

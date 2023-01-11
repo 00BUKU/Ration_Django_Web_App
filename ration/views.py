@@ -289,6 +289,7 @@ def signup(request):
 
 def profile_detail(request, user_id):
     profile = Profile.objects.get(user_id=user_id) 
-    context = {'profile': profile}
+    recipes = Recipe.objects.filter(user_id=user_id)
+    context = {'profile': profile, 'recipes': recipes}
     return render(request, 'registration/user_profile.html', context)
 
