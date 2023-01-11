@@ -216,6 +216,11 @@ def meal_log(request, date):
   return render(request, 'profile/meal_log.html', {'date': parsed_date, 'meals': meals, 'day_before':day_before, 'day_after':day_after, 'M': MEALS})
 
 @login_required
+def meal_search(request):
+  recipes = Recipe.objects.all()
+  return render(request, 'meals/search.html', {'recipes': recipes})
+
+@login_required
 def meal_create(request, recipe_id):
   recipe = Recipe.objects.get(id=recipe_id)
   form = MealForm()
