@@ -43,7 +43,6 @@ class CreateRecipeForm(forms.Form):
     directions = forms.CharField(widget=forms.Textarea)
     cooking_minutes = forms.IntegerField(min_value=0)
     preparation_minutes = forms.IntegerField(min_value=0)
-    image = forms.ImageField(required=False)
     servings = forms.IntegerField(min_value=1)
 
     def __init__(self, *args, **kwargs):

@@ -19,8 +19,8 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 
 # Add these "constant" variables below the imports
-S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
-BUCKET = 'ration'
+S3_BASE_URL = 'https://s3.us-east-1.amazonaws.com/'
+BUCKET = 'rationdjangoapp'
 
 
 def is_float(element: any) -> bool:
@@ -83,7 +83,8 @@ def unfavorite_recipe(request, recipe_id):
 @login_required
 def recipe_create(request):
   if request.method == "POST":
-    form = CreateRecipeForm(request.POST, request.FILES)
+    form = CreateRecipeForm(request.POST)
+    photo_file = request.FILES.get('photo-file', None)
     amountDict = {}
     for key, value in request.POST.items():
       if key.startswith('amount-') and is_float(value):
@@ -100,15 +101,25 @@ def recipe_create(request):
             amountDict[key[5:]] = {'size': value}
 
     if form.is_valid():
-      
       new_recipe = Recipe()
       for key, value in form.cleaned_data.items():
         setattr(new_recipe, key, value)
       new_recipe.user_id = request.user.id
+      if photo_file:
+        s3 = boto3.client('s3')
+        key = 'ration/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            new_recipe.image = url
+        except:
+            print('An error occurred uploading file to S3')
       new_recipe.save()
       for key, value in amountDict.items():
         amount = Amount(recipe_id=new_recipe.id, ingredient_id=key, amount=value.get('amount', 0.0), size=value.get('size', 'M'))
         amount.save()
+      
+
       return redirect('detail', recipe_id=new_recipe.id)
     else:
       return redirect('recipe_create')
@@ -121,6 +132,7 @@ def recipe_create(request):
 def recipe_update(request, recipe_id):
   if request.method == "POST":
     form = CreateRecipeForm(request.POST, request.FILES)
+    photo_file = request.FILES.get('photo-file', None)
     amountDict = {}
     for key, value in request.POST.items():
       if key.startswith('amount-') and is_float(value):
@@ -140,6 +152,15 @@ def recipe_update(request, recipe_id):
       recipe = Recipe.objects.get(id=recipe_id)
       for key, value in form.cleaned_data.items():
         setattr(recipe, key, value)
+      if photo_file:
+        s3 = boto3.client('s3')
+        key = 'ration/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            recipe.image = url
+        except:
+            print('An error occurred uploading file to S3')
       recipe.save()
       existing_ingredients = Amount.objects.filter(recipe_id=recipe_id)
       for key, value in amountDict.items():
@@ -307,13 +328,23 @@ def profile_update(request):
   user = User.objects.get(id=request.user.id)
   if request.method == 'POST':
     form = ProfileForm(request.POST)
+    photo_file = request.FILES.get('photo-file', None)
     if form.is_valid():
       for key, value in form.cleaned_data.items():
         setattr(profile, key, value)
         setattr(user, key, value)
+      if photo_file:
+        s3 = boto3.client('s3')
+        key = 'profile/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            profile.image = url
+        except:
+            print('An error occurred uploading file to S3')
       profile.save()
       user.save()
-      return redirect('my_profile')
+      return redirect('profile_detail', user.id)
     return redirect('profile_update')
   else: 
     data = {
