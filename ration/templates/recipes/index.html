@@ -51,7 +51,7 @@
 		<div class="card-body text-sm-left" >
 			<a href="{% url 'detail' recipe.id %}" class="stretched-link">
 				{% if recipe.image %}
-					<img class="float-left img-thumbnail mr-4" src="{{ recipe.image.url }}" alt="Image" width="13%">
+					<img class="float-left img-thumbnail mr-4" src="{{ recipe.image }}" alt="Image" width="13%">
 				
 				{% endif%}
 			   </a> 
