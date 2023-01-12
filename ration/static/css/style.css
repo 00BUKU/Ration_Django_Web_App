@@ -190,12 +190,12 @@ h2{
 
 #previous {
     float: left;
-    background-color: #28a745;
+    background-color:  #002147;
 }
 
 #next {
     float: right;
-    background-color:#28a745
+    background-color:#002147
 }
 
 
@@ -205,12 +205,22 @@ h2{
     padding: 10px 0;
 }
 
+#container-nutrition{
+  padding: 10px;
+  margin: 20px
+
+}
 .nutrition {
   border-radius: 5px;
   padding: 10px;
-  background-color: #63da7f;
+  background-color:  #0c2e58;
   margin-top: 0;
   color: black;
+}
+
+#card-nutrition{
+  background-color: #b7b7b7;
+  
 }
 
 .footer-container-calendar select {
@@ -229,7 +239,7 @@ h2{
 }
 
 .complete {
-  background-color: green;
+  background-color:  #002147;
 }
 
 .column_name {
@@ -252,3 +262,6 @@ h2{
   width: 15%;
 }
 
+#add-meal{
+  text-decoration: none;
+}

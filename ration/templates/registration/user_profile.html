@@ -22,10 +22,14 @@
     <hr>
     
     {% if profile.user == request.user %}
+    
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Edit Profile
         </button>
+        
+        
+
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a class="dropdown-item" href="{% url 'profile_update' %}">Update Profile</a>
           <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
@@ -51,7 +55,10 @@
 
   <hr>
   <a id="add-recipe-p" href="{% url 'recipe_create' %}"> <button type="button" class="btn btn-primary" >Add a recipe</button></a>
-  </div>
+  <hr>
+  <a  href="{% url 'my_profile' %}"> <button class="btn btn-outline-primary">Add A Meal</a></button></a>
+  </div> 
+
 
   <div class="col-sm-4">
     <h5>Favorite Recipes: </h5>
