@@ -2,15 +2,17 @@
 
 
 {% block content %}
-    <h1 class="text-center">Nutrition Tracker</h1>
+    <h3 class="text-center">Nutrition Tracker</h3>
+    <hr>
 <div class="row">
   <div class="col-sm-5">
     <div class="container-calendar">
-        <h3 id="monthAndYear"></h3>
+        <h4 id="monthAndYear"></h4>
         <div class="button-container-calendar">
             <button id="previous" onclick="previous()">&#8249;</button>
             <button id="next" onclick="next()">&#8250;</button>
         </div>
+        
         <table class="table-calendar" id="calendar">
             <thead id="thead-month"></thead>
             <tbody id="calendar-body"></tbody>
@@ -35,29 +37,31 @@
         </div>
     </div>
   </div>
+
   <div class="col-sm-7">
     <div class="card bg-success text-white">
       <div class="card-body">
-        <h3 class="card-title text-center">Daily Nutrition</h3></div>
+       
+        <h5 class="card-title text-center">Daily Nutrition</h5></div>
         <div class="nutrition">
         <div class="row">
-          <div class="col-sm-3"><h5>Calories:</h5></div>
-          <div class="col-sm-3"><h5>Carbs:</h5></div>
-          <div class="col-sm-3"><h5>Fat:</h5></div>
-          <div class="col-sm-3"><h5>Protein:</h5></div>
+          <div class="col-sm-3 text-white"><h6>Calories:</h6></div>
+          <div class="col-sm-3 text-white"><h6>Carbs:</h6></div>
+          <div class="col-sm-3 text-white"><h6>Fat:</h6></div>
+          <div class="col-sm-3 text-white"><h6>Protein:</h6></div>
         </div>
       
       <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-3 text-white">
           {{ user.profile.daily_calorie }}
         </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 text-white">
           {{ user.profile.daily_carbohydrate }}
         </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 text-white">
           {{ user.profile.daily_fat }}
         </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 text-white">
           {{ user.profile.daily_protein }}
         </div>
       </div>
