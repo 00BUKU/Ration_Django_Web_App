@@ -49,8 +49,8 @@ SECRET_KEY = 'django-insecure-u!6!p8axd(4(y#-g6c6&a@$3*i#l!r&#b+m*2)$us!@q3q9rqn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['till-pond-2186.fly.dev', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['till-pond-2186.fly.dev', 'localhost']
+ALLOWED_HOSTS = ['still-pond-2186.fly.dev', 'localhost']
+CSRF_TRUSTED_ORIGINS = ['still-pond-2186.fly.dev', 'localhost']
 
 
 # Application definition
@@ -149,12 +149,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = "static"
+
 MEDIA_ROOT = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
