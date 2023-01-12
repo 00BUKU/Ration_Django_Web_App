@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ration</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light" data-spy="affix" data-offset-top="197">
+    <div class="container-fluid">
+        <a class="navbar-brand"  href="{% url 'home' %}"> {% load static %} <img src="{% static "images/logo3.png" %}" alt="home" width="90px" height="24px"></a>
+        <ul class="nav navbar-nav nav-tabs">
+          <li><a class="nav-link" href="{% url 'about' %}">About</a></li>
+          <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" href='#' role="button" aria-haspopup="true" aria-expanded="false">Recipes</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'index' %}">Recipes List</a></li>
+              <li><a class="dropdown-item" href="{% url 'recipe_create' %}"><i class="fa fa-plus" aria-hidden="true"></i>
+                Add Recipe</a></li>
+            </ul>
+          </li>
+          {% if user.is_authenticated %}
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item dropdown"><a  class="dropdown-toggle nav-link" data-toggle="dropdown" href='#' role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>
+                My Account</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'profile_detail' user.id %}">My Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'my_profile' %}">Meal Log</a></li></li>
+              </ul>
+              <li><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+          {% else %}
+              <li><a class="nav-link" href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              <li><a class="nav-link" href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+          {% endif %}
+            </ul>
+          </ul>
+            <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'recipes_search' %}">
+              {% csrf_token %}
+              <input type="search" class="form-control mr-sm-2" aria-label="Search" name="search">
+              <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-search"></i></button>
+            </form>
+    </div>
+  </nav>
+  <main class="container">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <footer class="container-fluid pt-1 pb-1 text-sm-right">
+    © 2023 Copyright ration.App
+  </footer>
+
+  
+</body>
+
+</html>

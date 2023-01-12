@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-4 ">
+    
+       
+    {% if profile.image %}
+        <img src="{{ profile.image }}" class="card-img-top" alt="">
+
+    {% else %}
+
+      <div> 
+      {% load static %} <img class="img-thumbnail mr-4" src="{% static "images/Profile.png" %}" alt="home" width="185px" height="210px">
+      </div>
+      
+    {% endif %}
+      <hr>
+      <h5>User: {{ profile.user.username }}</h5>
+
+    <p>Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+    <p>Email: {{ profile.user.email }}</p>
+    <hr>
+    
+    {% if profile.user == request.user %}
+    
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Edit Profile
+        </button>
+        
+        
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="{% url 'profile_update' %}">Update Profile</a>
+          <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+        </div>
+      </div>
+    {% endif %}
+        
+  </div>
+
+  <div class="col-sm-4">
+
+    <h5>My Recipes:</h5>
+    <hr>
+    <ul>
+        {% for recipe in recipes %}
+          <li ><a href="{% url 'detail' recipe.id %}">{{ recipe.title }}</a></li>
+      {% empty %}
+       <div class="notification space-below">
+        No recipes.
+      </div>
+    {% endfor %}
+  </ul>
+
+  <hr>
+  <a id="add-recipe-p" href="{% url 'recipe_create' %}"> <button type="button" class="btn btn-primary" >Add a recipe</button></a>
+  <hr>
+  <h5>My Meal Log:</h5>
+  <br>
+  <a  href="{% url 'my_profile' %}"> <button class="btn btn-outline-primary">Nutrition Tracker</button></a> 
+  <br><br>
+  <a href="{% url 'meal_search' %}"><button  id="add-meal" type="button" class="btn btn-outline-primary">Add A Meal</button></a>
+  </div> 
+  
+
+
+  <div class="col-sm-4">
+    <h5>Favorite Recipes: </h5>
+    <hr>
+      <ul>
+        {% for favorite in profile.favorites.all %}
+          <li><a href="{% url 'detail' favorite.id %}">{{ favorite.title }}</a></li>
+      {% empty %}
+       <div class="notification space-below">
+        No favorites.
+      </div>
+    {% endfor %}
+      </ul>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="add-meal">
+
+
+<div  class="shadow p-3 mb-5 bg-white rounded">
+    <h3>Add Meal</h3>
+    <hr>
+    {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        <div>
+            <h5>Meal: {{recipe}}</h5>
+            {{ form.as_p }}
+        </div>
+        <input class="btn btn-primary" type="submit" value="Add Meal">
+    </form>
+</div>
+</div>
+{% endblock content %}
+    

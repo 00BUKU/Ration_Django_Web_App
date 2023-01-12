@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div>
+        <h4 class="text-center">Meal Log: 
+            <br>
+        <div class="d-inline">
+            <a href="{% url 'meal_log' day_before %}">
+                <i class="fa fa-caret-left" aria-hidden="true"></i>
+            </a>
+            <time>{{ date }}</time>
+            <a href="{% url 'meal_log' day_after %}">
+                <i class="fa fa-caret-right" aria-hidden="true"></i>
+            </a>
+            <a href="{% url 'my_profile' %}">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+            </a>
+        </div>
+        </h4>
+        <br>
+    </div>
+    <hr />
+    <div>
+        <table class="table table-sm">
+            <colgroup>
+                <col class="column_name">
+                <col class="column_info">
+                <col class="column_info">
+                <col class="column_info">
+                <col class="column_info">
+                <col class="column_delete">
+            </colgroup>
+            <tbody>
+                
+                {% for m in M %}
+                                       
+                <tr class="table-primary">
+                    <th scope="Row">{{ m.1 }}</th>
+                    
+                    {% if forloop.first %}
+                    <th class="text-right">Calories</th>
+                    <th class="text-right">Carb (g)</th>
+                    <th class="text-right">Fat (g)</th>
+                    <th class="text-right">Protein (g)</th>
+                    <th></th>
+                    {% else %}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    {% endif %}
+                        
+                    
+                </tr>
+                {% for meal in meals|meal:m.0 %}
+                <tr class="each {{m.1}}">
+                    {% with nutrition=meal.calculate_nutrition %}
+                    <td class="align-middle">{{ meal.recipe.title }} ({{ meal.servings }})</td>
+                    <td class="calorie text-right align-middle">{{ nutrition.calorie|floatformat:2 }}</td>
+                    <td class="carbohydrate text-right align-middle">{{ nutrition.carbohydrate|floatformat:2 }}</td>
+                    <td class="fat text-right align-middle">{{ nutrition.fat|floatformat:2 }}</td>
+                    <td class="protein text-right align-middle">{{ nutrition.protein|floatformat:2 }}</td>
+                    <td><a href="{% url 'meal_delete' meal.id%}"><button class="btn btn-outline-primary">X</button></a></td>
+                    {% endwith %}
+                </tr>
+                {% endfor %}
+                <tr class="total {{m.1}} font-weight-bold">
+                    
+                    {% if forloop.last %}
+                    <td ><a href="{% url 'meal_search' %}"><button class="btn btn-outline-primary">Add Meal</a></button></td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}                    
+                    <td class="calorie text-right"></td>
+                    <td class="carbohydrate text-right"></td>
+                    <td class="fat text-right"></td>
+                    <td class="protein text-right"></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+                <tr class="total-daily text-right font-weight-bold">
+                    <th class="text-right">Total</th>
+                    <td class="calorie"></td>
+                    <td class="carbohydrate"></td>
+                    <td class="fat"></td>
+                    <td class="protein"></td>
+                    <td></td>
+                </tr>
+                <tr class="goal-daily text-right font-weight-normal">
+                    <th class="text-right">Daily Goal</th>
+                    <td class="calorie">{{ user.profile.daily_calorie }}</td>
+                    <td class="carbohydrate">{{ user.profile.daily_carbohydrate }}</td>
+                    <td class="fat">{{ user.profile.daily_fat }}</td>
+                    <td class="protein">{{ user.profile.daily_protein }}</td>
+                    <td></td>
+                </tr>
+                <tr class="remaining text-right font-weight-normal">
+                    <th class="text-right">Remaining</th>
+                    <td class="calorie"></td>
+                    <td class="carbohydrate"></td>
+                    <td class="fat"></td>
+                    <td class="protein"></td>
+                    <td></td>
+                </tr>
+            </tbody> 
+        </table>
+    </div>
+    <br>
+        <div class="card-body shadow p-3 mb-5 bg-white rounded">
+            <canvas id="myChart" width="400" height="100"></canvas> 
+        </div>
+        <br>
+        <a href="{% url 'profile_detail' user.id %}"><button type="button" class="btn btn-primary" style="text-decoration:none;" >back to My Profile</button></a>
+        <br><br>
+    <script>
+        $(document).ready(function() {
+            const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+            const values = ['calorie', 'carbohydrate', 'fat', 'protein'];
+            meals.forEach(function(m){
+                values.forEach(function(v) {
+                    let value = 0;
+                    $(`.each.${m} > .${v}`).each(function() {
+                        value += parseFloat($(this).text());
+                    })
+                    $(`.total.${m} > .${v}` ).text(value.toFixed(2));
+                })
+
+            })
+            values.forEach(function(v) {
+                let value = 0;
+                $(`.total > .${v}`).each(function() {
+                    value += parseFloat($(this).text());
+                })
+                $(`.total-daily > .${v}`).text(value.toFixed(2));
+            })
+            values.forEach(function(v) {
+                let value = parseFloat($(`.goal-daily > .${v}`).text());
+                value -= parseFloat($(`.total-daily > .${v}`).text());
+                console.log(value)
+                $(`.remaining > .${v}`).text(value.toFixed(2));
+            })
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['carbohydrate', 'fat', 'protein'],
+                    datasets: [{
+                        labels: 'Nutrients',
+                        data: [$('.total-daily > .carbohydrate').text(), 
+                                $('.total-daily > .fat').text(), 
+                                $('.total-daily > .protein').text()],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)', 
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    rotation: (0.5 * Math.PI)
+                }
+            })
+        });  
+    </script>
+{% endblock content %}
+    

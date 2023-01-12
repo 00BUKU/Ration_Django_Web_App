@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load ration_extras %}
+{% block content %}
+
+
+    <div class="card-deck mb-6 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h2 class="my-0 font-weight-normal">{{ recipe.title }} 
+                {% if user.is_authenticated %}
+                    {% if is_favorited %}
+                        <a href="{% url 'unfavorite_recipe' recipe.id %}"><i class="fa fa-star"></i></a>
+                    {% else %}
+                        <a href="{% url 'favorite_recipe' recipe.id %}"><i class="fa fa-star-o"></i></a>
+                    {% endif %}   
+                {% endif %}</h2>
+            </div>
+            <div class="card-body">
+                <div>
+                    {% if recipe.image %}
+                       <img class="img-thumbnail" src="{{ recipe.image }}" width="350">
+                    {% endif%}
+                    
+                </div>
+                <h1 class="card-title" >
+                <small class="text-muted"></small>
+               
+                   
+                </h1>
+                <h2><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if recipe.average_rating < 3 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if recipe.average_rating < 4 %}-o {% endif %}" ></span>
+            <span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h2>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Created by: <a href="{% url 'profile_detail' recipe.user.id %}">{{ recipe.user }}</a></li>
+                    <li>Date added: {{ recipe.date_added|date:"Y-m-d" }}</li> <hr />
+                    <a href="{% url 'meal_create' recipe.id%}"><button class="btn">Log Meal</button></a>
+                    <li class="prewrap">{{ recipe.summary }}</li>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Preparation time: {{ recipe.preparation_minutes }}</li>
+                    <li>Cooking time: {{ recipe.cooking_minutes }}</li>
+                    <li>Servings: {{ recipe.servings }}</li>
+                    <hr />
+                    <li><h4>Ingredients:</h4><ul class="list-unstyled">
+                    {% for ingredient in ingredients %}
+                        <li>{{ingredient.amount}} {{ ingredient.get_size_display }}s: {{ ingredient.ingredient.name }}</li>
+                    {% endfor %}
+                         </ul></li>
+                         <hr />
+                    <li><h4>Directions:</h4></li>
+                    <li id="directions" class="prewrap text-left">{{ recipe.directions }} {{ average_rating }}</li>
+                </ul>
+                {% if recipe.user == user %}
+                    <a href="{% url 'update' recipe.id %}"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Edit</button></a>
+                   
+                    <a href="{% url 'delete_recipe' recipe.id%}">
+                        <button  type="button" class="btn" value="Delete">Delete recipe</button></a>
+                    </a>
+                {% endif %}
+                </div> 
+            </div>
+        </div>
+
+
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h3>Nutritional Information</h3>
+                <h4 class="my-0 font-weight-normal"></h4>
+            </div>
+            <div class="card-body">
+<!-- here goes the nutritional info/ graphs -->
+                <canvas id="myChart" width="400" height="100"></canvas> 
+                <br /> 
+                <table class="table">
+                    <tbody>
+                        {% for nutrient, value in recipe.calculate_nutrition.items %}
+                            <tr>
+                                <th scope="row">{{ nutrient.capitalize }}</th>
+                                <td>{{ value|floatformat:2 }}{% if nutrient != 'calorie' %}g{% endif %}</td>
+                            </tr> 
+                        {% empty %}
+                        No nutritional information available
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="notification space-below">
+  {% if request.user.is_authenticated and not is_reviewed %}
+  <form method="post" action="{% url 'add_review' recipe.id %}">
+           {% csrf_token %}
+
+           <h3>Leave a review: </h3>
+          <div class="control">
+            <div class="select">
+                <label>Rating:</label>
+            </div>
+            <select class="form-control" name="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+          </div>
+            
+          </select>
+          </div>
+      <div class="field">
+          <label>Comment</label>
+          <div class="control">
+              <textarea class="textarea form-control" name="comment"></textarea>
+          </div>
+      </div>
+      <br />
+      <div class="field">
+          <div class="control">
+              <button class="btn btn-light is-success">Submit</button>
+          </div>
+      </div>
+  </form>
+  {%  elif is_reviewed %}
+        <p> You have already reviewed this recipe. </p>
+  {% else %}
+        <p> Please sign in to add review! </p>
+  {% endif%}
+<hr>
+<h2 class="subtitle">Reviews</h2>
+<div class="reviews-wrapper">
+ {% for review in reviews %}
+    <div class=" notification space-below">
+        <p>
+            <strong> Date: </strong> {{ review.date_added|date:"Y-m-d"}},
+            <span class="fa fa-star{% if review.rating < 1 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if review.rating < 2 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if review.rating < 3 %}-o {% endif %}"></span>
+            <span class="fa fa-star{% if review.rating < 4 %}-o {% endif %}" ></span>
+            <span class="fa fa-star{% if review.rating < 5 %}-o {% endif %}"></span>
+        </p>
+        <p>
+            {{ review.comment }}
+        </br>
+       <strong> Reviewer: </strong>
+            <a href="{% url 'profile_detail' review.user.id %}">{{ review.user }}</a>
+        </p>
+        {% if review.user == request.user %} 
+        <div class="d-flex">
+        <form method="POST" action="{% url 'update_review' review.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn" value="Edit">Edit</button>
+        </form>
+        
+        <form action ="{% url 'remove_review' recipe.id review.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn" value="Delete">Delete</button>
+        </form>
+        </div>
+        {% endif%}
+
+    </div>
+
+  {% empty %}
+      <div class="notification space-below">
+        No reviews yet...
+      </div>
+  {% endfor %}
+  </div>
+        
+  </div>
+</div>
+<script>
+// jquery function
+    $(document).ready(() => {
+        $('#directions').text($('#directions').text().replace(/\n/g, '\n\n'))
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['carbohydrate', 'fat', 'protein'],
+                datasets: [{
+                    labels: 'Nutrients',
+                    data: [Math.round(({{recipe.calculate_nutrition|get_item:"carbohydrate"}} + Number.EPSILON) * 100)/ 100, 
+                        Math.round(({{recipe.calculate_nutrition|get_item:"fat"}} + Number.EPSILON) * 100)/ 100, 
+                        Math.round(({{recipe.calculate_nutrition|get_item:"protein"}} + Number.EPSILON) * 100)/ 100,],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)', 
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                rotation: (0.5 * Math.PI)
+            }
+        })
+    });
+</script>
+{% endblock %}

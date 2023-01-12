@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="shadow p-3 mb-5 bg-white rounded">
+	<h3>Delete Recipe</h3>
+	<br />
+	<h6>Are you sure you want to delete <span class="text-primary">{{ recipe.title }} ?</span></h6>
+	<br />
+	<form action="" method="POST">
+		{% csrf_token %}
+		<input type="submit" value="Yes - Delete!" class="btn btn-primary">
+		<a href="{% url 'detail' recipe.id%}"> <button type="button" class="btn btn-outline-primary"> Cancel</button></a>
+	</form>
+</div>
+
+{% endblock content %}

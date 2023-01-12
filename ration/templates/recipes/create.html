@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div>
+
+
+<div id="form-add" class="shadow mb-8 bg-white rounded">
+{% if recipe %}
+	<h3>Edit Recipe <span class="teal-text">{{ recipe.name }}</span></h3>
+{% else %}
+	<h3>Add Recipe</h3>
+{% endif %}
+
+{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+	
+
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="file" name="photo-file">
+	<br />
+	<div class="d-flex justify-content-around align-items-start p-2 table-sm" cellspacing="0">
+		<table id="ingredient-list" class="table">
+			<colgroup>
+				<col class="column_ingredient">
+                <col class="column_data">
+                <col class="column_data">
+			</colgroup>
+			<thead>
+				<tr>
+					<th class="th-sm">Ingredient</th>
+					<th class="th-sm">Amount</th>
+					<th class="th-sm">Size</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				
+				{% for ingredient in ingredients %}
+				<tr data-id="{{ ingredient.ingredient.id }}">
+					<td class="name">
+						<button class="removeIngredient btn btn-light" type="button">X</button> <span>{{ ingredient.ingredient.name }}</span>
+					</td>
+					<td>
+						<input type="number" class="form-control" step="0.01" name="amount-{{ ingredient.ingredient.id }}" value="{{ ingredient.amount }}" min="0" required="">
+					</td>
+					<td>
+						<select class="form-control" name="size-{{ ingredient.ingredient.id }}" required="">
+							
+							{% for option in SIZES %}
+								<option value="{{ option.0 }}" 
+								{% if ingredient.size == option.0 %}
+									selected="selected"
+								{% endif %}
+									>{{ option.1 }}</option>
+							{% endfor %}
+								
+						</select>
+					</td>
+				</tr>	
+				{% endfor %}
+					
+					
+			</tbody>
+		</table>
+		<table id="ingredient-options" class="table table-hover table-striped table-bordered table-sm" cellspacing="0"
+		width="100%">
+		<thead>
+			<tr>
+			<th class="th-sm">Ingredient
+			</th>
+			</tr>
+		</thead>
+		<tbody>
+			
+			{% for ingredient in ingredient_list %}
+				<tr class = "addIngredient" data-id="{{ ingredient.id }}">
+					<td class="d-flex justify-content-between">
+						<span>{{ ingredient.name }}</span> <button class="btn btn-light" type="button">+</button>
+					</td>
+				</tr>
+			{% endfor %}
+				
+			</tbody>
+		</table>
+	</div>
+	<input type="submit" value="Submit" class="btn btn-outline-primary">
+	
+</form>
+
+</div>
+</div>
+<br />
+<script>
+	$(document).ready(function () {
+		$('#ingredient-options').DataTable({
+			"scrollY": "200px",
+			"scrollCollapse": true,
+		});
+		$('.dataTables_length').addClass('bs-select');
+		$('#ingredient-options_filter > input').addClass('form-control')
+		$('.paginate_button').addClass('btn')
+	});
+
+
+	$('#ingredient-options').on('click', '.addIngredient', function(event) {
+		row = $(this).closest('tr');
+		$("#ingredient-list").find('tbody')
+    	.append($(`<tr data-id=${row.data('id')}>
+			<td class="name">
+				<button class="removeIngredient btn btn-light" type="button">X</button> <span>${row.find('span').prop("innerText")}</span>
+			</td>
+			<td>
+				<input type="number" class="form-control" step="0.01" name="amount-${row.data('id')}" min="0" required="">
+			</td>
+			<td>
+				<select class="form-control" name="size-${row.data('id')}" required="">
+					<option value="S">Teaspoons</option>
+					<option value="M" selected>Tablespoons</option>
+					<option value="L">Cups</option>
+				</select>
+			</td>
+		</tr>`)
+            )
+		row.remove();
+	});
+
+	$('#ingredient-list').on('click', '.removeIngredient', function(event) {
+		row = $(this).closest('tr');
+		$('#ingredient-options').find('tbody')
+		.append($(`<tr class = "addIngredient" data-id="${row.data('id')}">
+					<td class="d-flex justify-content-between">
+						<span>${row.find('span').text()}</span> <button class="btn btn-light" type="button">+</button>
+					</td>
+				</tr>`)
+		);
+		row.remove();
+	})
+</script>
+{% endblock content %}
