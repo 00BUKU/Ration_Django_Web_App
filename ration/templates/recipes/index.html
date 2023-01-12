@@ -48,7 +48,7 @@
 	{% endfor %}	
 	>
 		
-		<div class="card-body text-sm-left" >
+		<div class="card-body text-sm-left shadow p-3 " >
 			<a href="{% url 'detail' recipe.id %}" class="stretched-link">
 				{% if recipe.image %}
 					<img class="float-left img-thumbnail mr-4" src="{{ recipe.image.url }}" alt="Image" width="13%">
@@ -63,6 +63,7 @@
 				<span class="fa fa-star{% if rating < 4 %}-o {% endif %}" ></span>
 				<span class="fa fa-star{% if rating < 5 %}-o {% endif %}"></span></h5>
 				<p class="card-text">{{ recipe.summary }}</p>
+				<button type="button" class="btn btn-secondary" >Details</button></a>
 		
 		</div>
 	</div>
