@@ -1,46 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<br><br><br><br>
-<div id="home-message" >
+  <div id="home-message" class="h-100 d-flex flex-column align-items-center"> 
+    <div class="top"></div>
     <div class="container-fluid text-center">
       <h1>Good health starts with what you eat</h1>      
       <p>Want to eat mindfully? Find healthy and nutritious recipes for your everyday.</p><br><br>
       <a href="{% url 'recipe_create' %}"> <button type="button" class="btn btn-primary" >Add a recipe</button></a>
       <a href="{% url 'index' %}"> <button type="button" class="btn btn-outline-primary" >Recipe List</button></a>
     </div>
-</div>
-
-
-  <div class="container-fluid bg-3 text-center">    
-    <h4>The Favorites</h4><br>
-    <hr>
+    <div class="bottom">
+      <i id="indicator" class="fa fa-caret-down fa-5x" aria-hidden="true"></i>
+    </div>
+    
+  </div>
+<div class="container bg-3 text-center">    
+    <br><br /><h3>Top Favorited</h3><br />
     <div class="row mb-4">
       
       {% for favorite in top_favorites %}
         
         <div class="col-sm-4">
           <div class="card">
-          <a href="{% url 'detail' favorite.0.id %}" class="stretched-link">
+          <a href="{% url 'detail' favorite.0.id %}" class="stretched-link"></a>
             <div class="card-body">
-            <h4 class="card-title">{{favorite.0.title}}</h4>
-            <h5>
+            <h3 class="card-title">{{favorite.0.title}}</h3>
+            <h4>
               <span class="fa fa-star{% if favorite.0.average_rating < 1 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 2 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 3 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 4 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 5 %}-o {% endif %}"></span>
-            </h5>
+            </h4>
             {% if favorite.0.image %}
         <img src="{{ favorite.0.image }}" class="img-responsive" style="width:100%" alt="Image">
         {% endif %}
         </div>
-      </a>
       </div>
       </div>
       {% endfor %}
 
     </div>
   </div><br>
-  
+  <script>
+    $(window).scroll(function(){
+    $("#indicator").css("opacity", 1 - $(window).scrollTop() / 250);
+  });
+  </script>
 {% endblock %}

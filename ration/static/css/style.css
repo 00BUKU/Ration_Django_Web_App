@@ -24,11 +24,29 @@ body > .container {
   padding-top: 60px;
 }
 
-
-#home-message{
-  padding-top: 100px;
-  padding-bottom: 350px;
+.top {
+  flex: .6;
 }
+
+.bottom {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#indicator {
+  animation: indicate 1s linear infinite alternate;
+}
+
+@keyframes indicate {
+  0% {
+    transform: scale(1) translateY(-10%);
+  }
+  100% {
+    transform: scale(1.1) translateY(-25%);
+  }
+}
+
 /* Add a gray background color and some padding to the footer */
 footer {
   background-color: #e9e9e9;

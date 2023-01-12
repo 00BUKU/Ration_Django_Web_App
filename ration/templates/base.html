@@ -19,7 +19,7 @@
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" data-spy="affix" data-offset-top="197">
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light" data-spy="affix" data-offset-top="197">
     <div class="container-fluid">
         <a class="navbar-brand"  href="{% url 'home' %}"> {% load static %} <img src="{% static "images/logo3.png" %}" alt="home" width="90px" height="24px"></a>
         <ul class="nav navbar-nav nav-tabs">
@@ -59,8 +59,8 @@
     {% endblock %}
   </main>
 
-  <footer class="container-fluid text-sm-center ">
-    <p>© 2023 Copyright ration.App</p>
+  <footer class="container-fluid pt-1 pb-1 text-sm-right">
+    © 2023 Copyright ration.App
   </footer>
 
   
