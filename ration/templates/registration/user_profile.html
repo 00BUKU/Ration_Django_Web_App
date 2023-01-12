@@ -56,8 +56,13 @@
   <hr>
   <a id="add-recipe-p" href="{% url 'recipe_create' %}"> <button type="button" class="btn btn-primary" >Add a recipe</button></a>
   <hr>
-  <a  href="{% url 'my_profile' %}"> <button class="btn btn-outline-primary">Add A Meal</a></button></a>
+  <h5>My Meal Log:</h5>
+  <br>
+  <a  href="{% url 'my_profile' %}"> <button class="btn btn-outline-primary">Nutrition Tracker</button></a> 
+  <br><br>
+  <a href="{% url 'meal_search' %}"><button  id="add-meal" type="button" class="btn btn-outline-primary">Add A Meal</button></a>
   </div> 
+  
 
 
   <div class="col-sm-4">

@@ -40,7 +40,7 @@
 
 {% with nutrition=recipe.calculate_nutrition rating=recipe.average_rating%}
 
-<div class=""> 
+<div> 
 	<div class="card recipe mb-3" data-title="{{ recipe.title }}" data-rating="{{ rating }} "
 
 	{% for key, value in nutrition.items %}

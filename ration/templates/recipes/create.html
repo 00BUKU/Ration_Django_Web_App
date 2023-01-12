@@ -2,12 +2,14 @@
 
 
 {% block content %}
+<div>
 
 
+<div id="form-add" class="shadow mb-8 bg-white rounded">
 {% if recipe %}
-	<h1>Edit <span class="teal-text">{{ recipe.name }}</span></h1>
+	<h3>Edit Recipe <span class="teal-text">{{ recipe.name }}</span></h3>
 {% else %}
-	<h1>Add Recipe</h1>
+	<h3>Add Recipe</h3>
 {% endif %}
 
 {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
@@ -86,6 +88,9 @@
 	<input type="submit" value="Submit" class="btn btn-outline-primary">
 	
 </form>
+
+</div>
+</div>
 <br />
 <script>
 	$(document).ready(function () {
