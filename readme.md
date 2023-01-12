@@ -10,7 +10,7 @@
 #### Users can log in/out and access other pages via the nav bar at the top of the page.
 #### Additionally the nav bar at the top contains the ability to search.
 #### Users have limited access until logged in.
-<img width="1796" alt="Screenshot 2023-01-12 at 12 54 47 AM" src="https://user-images.githubusercontent.com/111539458/211993036-f5a11fce-922a-43fd-b348-b5721757cbfb.png">
+![image](https://user-images.githubusercontent.com/111539458/212089563-58ca7891-4038-41ce-8dc0-8f3842548b6b.png)
 <br>
 <br>
 <br>
@@ -38,6 +38,10 @@
 <br>
 <br>
 <br>
+
+### Meal Log
+#### The meal log page gives users a detailed view of nutritional intake organized across meals logged.
+<img width="1745" alt="Screenshot 2023-01-12 at 9 19 26 AM" src="https://user-images.githubusercontent.com/111539458/212091923-6bb55ffb-1df3-4d45-b01b-6986a592374a.png">
 
 ### About Page
 #### The about page contains graphics and more information about Ration.
