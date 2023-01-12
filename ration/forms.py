@@ -27,13 +27,25 @@ class ReviewForm(forms.ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
+class ProfileForm(forms.Form):
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    daily_calorie = forms.FloatField(min_value=0)
+    daily_carbohydrate = forms.FloatField(min_value=0)
+    daily_fat = forms.FloatField(min_value=0)
+    daily_protein = forms.FloatField(min_value=0)
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
 class CreateRecipeForm(forms.Form):
     title = forms.CharField(max_length=50)
     summary = forms.CharField(widget=forms.Textarea,max_length=500)
     directions = forms.CharField(widget=forms.Textarea)
     cooking_minutes = forms.IntegerField(min_value=0)
     preparation_minutes = forms.IntegerField(min_value=0)
-    image = forms.ImageField(required=False)
     servings = forms.IntegerField(min_value=1)
 
     def __init__(self, *args, **kwargs):
@@ -44,7 +56,7 @@ class CreateRecipeForm(forms.Form):
 
 class MealForm(forms.Form):
     servings = forms.FloatField(min_value=0, initial=1.0)
-    date = forms.DateField(initial=datetime.date.today)
+    date = forms.DateField(widget=forms.SelectDateWidget(empty_label="Nothing"), initial=datetime.date.today)
     meal = forms.ChoiceField(choices=MEALS)
 
     def __init__(self, *args, **kwargs):

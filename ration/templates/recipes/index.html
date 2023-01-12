@@ -47,19 +47,24 @@
 		data-{{ key }}="{{ value }}" 
 	{% endfor %}	
 	>
-		<a href="{% url 'detail' recipe.id %}" class="stretched-link">
-		{% if recipe.image %}
-					   <img src="{{ recipe.image.url }}" class="card-img-top" alt="Image">
-					{% endif%}
-	   </a>
-		<div class="card-body text-center" >
-		<h3 class="card-title">{{ recipe }}</h3>
-		<h5 class="card-subtitle"><span class="fa fa-star{% if rating < 1 %}-o {% endif %}"></span>
-			<span class="fa fa-star{% if rating < 2 %}-o {% endif %}"></span>
-			<span class="fa fa-star{% if rating < 3 %}-o {% endif %}"></span>
-			<span class="fa fa-star{% if rating < 4 %}-o {% endif %}" ></span>
-			<span class="fa fa-star{% if rating < 5 %}-o {% endif %}"></span></h5>
-		<p class="card-text">{{ recipe.summary }}</p>
+		
+		<div class="card-body text-sm-left shadow p-3 " >
+			<a href="{% url 'detail' recipe.id %}" class="stretched-link">
+				{% if recipe.image %}
+					<img class="float-left img-thumbnail mr-4" src="{{ recipe.image }}" alt="Image" width="13%">
+				
+				{% endif%}
+			   </a> 
+			 
+				<h3 class="card-title">{{ recipe }}</h3>
+				<h5 class="card-subtitle"><span class="fa fa-star{% if rating < 1 %}-o {% endif %}"></span>
+				<span class="fa fa-star{% if rating < 2 %}-o {% endif %}"></span>
+				<span class="fa fa-star{% if rating < 3 %}-o {% endif %}"></span>
+				<span class="fa fa-star{% if rating < 4 %}-o {% endif %}" ></span>
+				<span class="fa fa-star{% if rating < 5 %}-o {% endif %}"></span></h5>
+				<p class="card-text">{{ recipe.summary }}</p>
+				<button type="button" class="btn btn-secondary" >Details</button></a>
+		
 		</div>
 	</div>
 </div>

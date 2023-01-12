@@ -2,7 +2,7 @@
 {% load ration_extras %}
 {% block content %}
 
-<div class="container">
+
     <div class="card-deck mb-6 text-center">
         <div class="card mb-4 box-shadow">
             <div class="card-header">
@@ -18,14 +18,14 @@
             <div class="card-body">
                 <div>
                     {% if recipe.image %}
-                       <img src="{{ recipe.image.url }}" width="350">
+                       <img class="img-thumbnail" src="{{ recipe.image }}" width="350">
                     {% endif%}
                     
                 </div>
                 <h1 class="card-title" >
                 <small class="text-muted"></small>
                
-            </div>        
+                   
                 </h1>
                 <h2><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
             <span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
@@ -53,14 +53,15 @@
                 </ul>
                 {% if recipe.user == user %}
                     <a href="{% url 'update' recipe.id %}"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Edit</button></a>
-                    <form action ="{% url 'delete_recipe' recipe.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn" value="Delete">Delete recipe</button>
-                    </form>
+                   
+                    <a href="{% url 'delete_recipe' recipe.id%}">
+                        <button  type="button" class="btn" value="Delete">Delete recipe</button></a>
+                    </a>
                 {% endif %}
+                </div> 
             </div>
         </div>
-    </div>
+
 
     <div class="card-deck mb-3 text-center">
         <div class="card mb-4 box-shadow">

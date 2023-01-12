@@ -29,7 +29,7 @@ class Recipe(models.Model):
     directions = models.TextField()
     cooking_minutes = models.IntegerField(validators=[MinValueValidator(0)])
     preparation_minutes = models.IntegerField(validators=[MinValueValidator(0)])
-    image = models.ImageField(null=True, blank=True, upload_to="images/")
+    image = models.CharField(null=True, blank=True, max_length=200)
     servings = models.IntegerField(validators=[MinValueValidator(1)])
     ingredient = models.ManyToManyField(Ingredient, through='Amount')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -84,7 +84,7 @@ class Amount(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, blank=True, upload_to="profile/")
+    image = models.CharField(null=True, blank=True, max_length=200)
     daily_calorie = models.FloatField(default=2000.0, validators=[MinValueValidator(0.0)])
     daily_carbohydrate = models.FloatField(default=300.0, validators=[MinValueValidator(0.0)])
     daily_fat = models.FloatField(default=65.0, validators=[MinValueValidator(0.0)])
@@ -107,7 +107,6 @@ class Profile(models.Model):
         date = datetime.datetime(year, month, day)
         return self.meal_set.filter(date=date).count() >= len(MEALS) - 1
 
-
     @classmethod
     def count_favorites(cls):
         favorites = cls.favorites.through.objects.all()
@@ -117,7 +116,7 @@ class Profile(models.Model):
                 favorites_dictionary[favorite.recipe] = 1
             else:
                 favorites_dictionary[favorite.recipe] += 1
-        return sorted(favorites_dictionary.items(), key=operator.itemgetter(1),reverse=True)[:4]
+        return sorted(favorites_dictionary.items(), key=operator.itemgetter(1),reverse=True)[:3]
 
 class Review(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

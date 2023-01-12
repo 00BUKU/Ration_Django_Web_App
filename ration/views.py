@@ -6,17 +6,21 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 from .models import Recipe, Review, Profile, Amount, Ingredient, Meal, SIZES, MEALS
 import datetime
 
 import uuid
 import boto3
 
-from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm
+from .forms import RegisterForm, ReviewForm, CreateRecipeForm, MealForm, ProfileForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 # Add these "constant" variables below the imports
-S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
-BUCKET = 'ration'
+S3_BASE_URL = 'https://s3.us-east-1.amazonaws.com/'
+BUCKET = 'rationdjangoapp'
 
 
 def is_float(element: any) -> bool:
@@ -79,7 +83,8 @@ def unfavorite_recipe(request, recipe_id):
 @login_required
 def recipe_create(request):
   if request.method == "POST":
-    form = CreateRecipeForm(request.POST, request.FILES)
+    form = CreateRecipeForm(request.POST)
+    photo_file = request.FILES.get('photo-file', None)
     amountDict = {}
     for key, value in request.POST.items():
       if key.startswith('amount-') and is_float(value):
@@ -96,15 +101,25 @@ def recipe_create(request):
             amountDict[key[5:]] = {'size': value}
 
     if form.is_valid():
-      
       new_recipe = Recipe()
       for key, value in form.cleaned_data.items():
         setattr(new_recipe, key, value)
       new_recipe.user_id = request.user.id
+      if photo_file:
+        s3 = boto3.client('s3')
+        key = 'ration/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            new_recipe.image = url
+        except:
+            print('An error occurred uploading file to S3')
       new_recipe.save()
       for key, value in amountDict.items():
         amount = Amount(recipe_id=new_recipe.id, ingredient_id=key, amount=value.get('amount', 0.0), size=value.get('size', 'M'))
         amount.save()
+      
+
       return redirect('detail', recipe_id=new_recipe.id)
     else:
       return redirect('recipe_create')
@@ -117,6 +132,7 @@ def recipe_create(request):
 def recipe_update(request, recipe_id):
   if request.method == "POST":
     form = CreateRecipeForm(request.POST, request.FILES)
+    photo_file = request.FILES.get('photo-file', None)
     amountDict = {}
     for key, value in request.POST.items():
       if key.startswith('amount-') and is_float(value):
@@ -136,6 +152,15 @@ def recipe_update(request, recipe_id):
       recipe = Recipe.objects.get(id=recipe_id)
       for key, value in form.cleaned_data.items():
         setattr(recipe, key, value)
+      if photo_file:
+        s3 = boto3.client('s3')
+        key = 'ration/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            recipe.image = url
+        except:
+            print('An error occurred uploading file to S3')
       recipe.save()
       existing_ingredients = Amount.objects.filter(recipe_id=recipe_id)
       for key, value in amountDict.items():
@@ -170,19 +195,23 @@ def recipe_update(request, recipe_id):
   context = {'recipe': recipe, 'form': form, 'ingredients': ingredients, 'ingredient_list': ingredient_list, 'SIZES':SIZES }
   return render(request, 'recipes/create.html', context)
 
+@login_required
 def delete_recipe(request, recipe_id):
   recipe=Recipe.objects.get(id=recipe_id)
-  if recipe.user_id == request.user.id:
-    recipe.delete()
-  return redirect('index')
-
+  if request.method == 'POST':
+    if recipe.user_id == request.user.id:
+      recipe.delete()
+      return redirect('index')
+  return render(request, 'recipes/confirm_delete.html', {'recipe': recipe})
 
 @login_required
 def add_review(request, recipe_id):
   form = ReviewForm(request.POST)
 
   if form.is_valid():
-    new_review = form.save(commit=False)
+    new_review = Review()
+    for key, value in form.cleaned_data.items():
+      setattr(new_review, key, value)
     new_review.user_id = request.user.id
     new_review.recipe_id = recipe_id
     new_review.save()
@@ -288,7 +317,60 @@ def signup(request):
   return render(request, 'registration/signup.html', context)
 
 def profile_detail(request, user_id):
-    profile = Profile.objects.get(user_id=user_id) 
-    context = {'profile': profile}
-    return render(request, 'registration/user_profile.html', context)
+  profile = Profile.objects.get(user_id=user_id) 
+  recipes = Recipe.objects.filter(user_id=user_id)
+  context = {'profile': profile, 'recipes': recipes}
+  return render(request, 'registration/user_profile.html', context)
 
+@login_required
+def profile_update(request):
+  profile = Profile.objects.get(user_id=request.user.id)
+  user = User.objects.get(id=request.user.id)
+  if request.method == 'POST':
+    form = ProfileForm(request.POST)
+    photo_file = request.FILES.get('photo-file', None)
+    if form.is_valid():
+      for key, value in form.cleaned_data.items():
+        setattr(profile, key, value)
+        setattr(user, key, value)
+      if photo_file:
+        s3 = boto3.client('s3')
+        key = 'profile/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            profile.image = url
+        except:
+            print('An error occurred uploading file to S3')
+      profile.save()
+      user.save()
+      return redirect('profile_detail', user.id)
+    return redirect('profile_update')
+  else: 
+    data = {
+      'first_name': user.first_name,
+      'last_name': user.last_name,
+      'daily_calorie': profile.daily_calorie,
+      'daily_carbohydrate': profile.daily_carbohydrate,
+      'daily_fat': profile.daily_fat,
+      'daily_protein': profile.daily_protein,
+    }
+    form = ProfileForm(initial=data)
+  return render(request, 'registration/update.html', {'form': form})
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('my_profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/password.html', {
+        'form': form
+    })

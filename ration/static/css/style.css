@@ -78,9 +78,6 @@ bottom: .5em;
   white-space: pre-wrap;
 }
 
-.card{
-  padding: 1em;
-}
 
 h2{
   font-weight: 700;
@@ -193,16 +190,37 @@ h2{
 
 #previous {
     float: left;
+    background-color:  #002147;
 }
 
 #next {
     float: right;
+    background-color:#002147
 }
+
 
 .footer-container-calendar {
     margin-top: 1em;
     border-top: 1px solid #dadada;
     padding: 10px 0;
+}
+
+#container-nutrition{
+  padding: 10px;
+  margin: 20px
+
+}
+.nutrition {
+  border-radius: 5px;
+  padding: 10px;
+  background-color:  #0c2e58;
+  margin-top: 0;
+  color: black;
+}
+
+#card-nutrition{
+  background-color: #b7b7b7;
+  
 }
 
 .footer-container-calendar select {
@@ -221,11 +239,11 @@ h2{
 }
 
 .complete {
-  background-color: green;
+  background-color:  #002147;
 }
 
 .column_name {
-  width: 55%;
+  width: 45%;
 }
 
 .column_info {
@@ -242,4 +260,8 @@ h2{
 
 .column_data {
   width: 15%;
+}
+
+#add-meal{
+  text-decoration: none;
 }
