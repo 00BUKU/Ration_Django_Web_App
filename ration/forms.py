@@ -53,7 +53,7 @@ class CreateRecipeForm(forms.Form):
 
 class MealForm(forms.Form):
     servings = forms.FloatField(min_value=0, initial=1.0)
-    date = forms.DateField(initial=datetime.date.today)
+    date = forms.DateField(widget=forms.SelectDateWidget(empty_label="Nothing"), initial=datetime.date.today)
     meal = forms.ChoiceField(choices=MEALS)
 
     def __init__(self, *args, **kwargs):
