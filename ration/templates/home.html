@@ -14,7 +14,7 @@
     </div>
     
   </div>
-<div class="container bg-3 text-center">    
+<div id="favorites" class="container bg-3 text-center">    
     <br><br /><h3>Top Favorited</h3><br />
     <div class="row mb-4">
       
@@ -44,7 +44,21 @@
   </div><br>
   <script>
     $(window).scroll(function(){
-    $("#indicator").css("opacity", 1 - $(window).scrollTop() / 250);
-  });
+      $("#indicator").css("opacity", 1 - $(window).scrollTop() / 250);
+      $('#favorites').each( function(i){
+            
+            var bottom_of_object = $(this).position().top + $(this).outerHeight();
+            var bottom_of_window = $(window).scrollTop() + $(window).height();
+            
+            /* If the object is completely visible in the window, fade it it */
+            if( bottom_of_window > bottom_of_object ){
+                
+                $(this).animate({'opacity':'1'},1500);
+                    
+            }
+            
+        }); 
+    
+    });
   </script>
 {% endblock %}
