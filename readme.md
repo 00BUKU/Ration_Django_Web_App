@@ -68,7 +68,8 @@
 ## Getting Started
 <br>
 
-  ### deployment link here
+## Deployment link:
+### Try Ration now by clicking [here](https://still-pond-2186.fly.dev/).
 
 <br>
 <br>
