@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div id="home-message">
+<br><br><br><br>
+<div id="home-message" >
     <div class="container-fluid text-center">
       <h1>Good health starts with what you eat</h1>      
-      <p>Want to eat mindfully? Find healthy and nutricius recipes for your everyday </p><br><br>
+      <p>Want to eat mindfully? Find healthy and nutritious recipes for your everyday.</p><br><br>
       <a href="{% url 'recipe_create' %}"> <button type="button" class="btn btn-primary" >Add a recipe</button></a>
       <a href="{% url 'index' %}"> <button type="button" class="btn btn-outline-primary" >Recipe List</button></a>
-    </div><br><br><br>
+    </div>
 </div>
 
+
   <div class="container-fluid bg-3 text-center">    
-    <h3>The Favorites</h3><br>
+    <h4>The Favorites</h4><br>
+    <hr>
     <div class="row mb-4">
       
       {% for favorite in top_favorites %}
@@ -21,14 +23,14 @@
           <div class="card">
           <a href="{% url 'detail' favorite.0.id %}" class="stretched-link">
             <div class="card-body">
-            <h3 class="card-title">{{favorite.0.title}}</h3>
-            <h4>
+            <h4 class="card-title">{{favorite.0.title}}</h4>
+            <h5>
               <span class="fa fa-star{% if favorite.0.average_rating < 1 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 2 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 3 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 4 %}-o {% endif %}"></span>
               <span class="fa fa-star{% if favorite.0.average_rating < 5 %}-o {% endif %}"></span>
-            </h4>
+            </h5>
             {% if favorite.0.image %}
         <img src="{{ favorite.0.image }}" class="img-responsive" style="width:100%" alt="Image">
         {% endif %}
