@@ -78,9 +78,6 @@ bottom: .5em;
   white-space: pre-wrap;
 }
 
-.card{
-  padding: 1em;
-}
 
 h2{
   font-weight: 700;
@@ -200,6 +197,7 @@ h2{
     float: right;
     background-color:#28a745
 }
+
 
 .footer-container-calendar {
     margin-top: 1em;
