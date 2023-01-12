@@ -328,13 +328,23 @@ def profile_update(request):
   user = User.objects.get(id=request.user.id)
   if request.method == 'POST':
     form = ProfileForm(request.POST)
+    photo_file = request.FILES.get('photo-file', None)
     if form.is_valid():
       for key, value in form.cleaned_data.items():
         setattr(profile, key, value)
         setattr(user, key, value)
+      if photo_file:
+        s3 = boto3.client('s3')
+        key = 'profile/' + uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            profile.image = url
+        except:
+            print('An error occurred uploading file to S3')
       profile.save()
       user.save()
-      return redirect('my_profile')
+      return redirect('profile_detail', user.id)
     return redirect('profile_update')
   else: 
     data = {

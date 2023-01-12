@@ -84,7 +84,7 @@ class Amount(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, blank=True, upload_to="profile/")
+    image = models.CharField(null=True, blank=True, max_length=200)
     daily_calorie = models.FloatField(default=2000.0, validators=[MinValueValidator(0.0)])
     daily_carbohydrate = models.FloatField(default=300.0, validators=[MinValueValidator(0.0)])
     daily_fat = models.FloatField(default=65.0, validators=[MinValueValidator(0.0)])
