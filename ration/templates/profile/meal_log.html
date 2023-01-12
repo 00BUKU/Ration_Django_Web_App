@@ -3,7 +3,7 @@
 {% block content %}
 
     <div>
-        <h3 class="text-center">Meal Log: 
+        <h4 class="text-center">Meal Log: 
             <br>
         <div class="d-inline">
             <a href="{% url 'meal_log' day_before %}">
@@ -17,7 +17,8 @@
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </a>
         </div>
-        </h3>
+        </h4>
+        <br>
     </div>
     <hr />
     <div>
@@ -68,7 +69,7 @@
                 <tr class="total {{m.1}} font-weight-bold">
                     
                     {% if forloop.last %}
-                    <td class="text-center"><a href="{% url 'meal_search' %}"><button class="btn btn-light">Add Meal</a></button></td>
+                    <td ><a href="{% url 'meal_search' %}"><button class="btn btn-outline-primary">Add Meal</a></button></td>
                     {% else %}
                     <td></td>
                     {% endif %}                    
@@ -87,7 +88,7 @@
                     <td class="protein"></td>
                     <td></td>
                 </tr>
-                <tr class="goal-daily text-right font-weight-bold">
+                <tr class="goal-daily text-right font-weight-normal">
                     <th class="text-right">Daily Goal</th>
                     <td class="calorie">{{ user.profile.daily_calorie }}</td>
                     <td class="carbohydrate">{{ user.profile.daily_carbohydrate }}</td>
@@ -95,7 +96,7 @@
                     <td class="protein">{{ user.profile.daily_protein }}</td>
                     <td></td>
                 </tr>
-                <tr class="remaining text-right font-weight-bold">
+                <tr class="remaining text-right font-weight-normal">
                     <th class="text-right">Remaining</th>
                     <td class="calorie"></td>
                     <td class="carbohydrate"></td>
@@ -106,9 +107,13 @@
             </tbody> 
         </table>
     </div>
-        <div class="card-body">
+    <br>
+        <div class="card-body shadow p-3 mb-5 bg-white rounded">
             <canvas id="myChart" width="400" height="100"></canvas> 
         </div>
+        <br>
+        <a href="{% url 'profile_detail' user.id %}"><button type="button" class="btn btn-primary" style="text-decoration:none;" >back to My Profile</button></a>
+        <br><br>
     <script>
         $(document).ready(function() {
             const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
