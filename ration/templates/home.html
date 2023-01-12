@@ -30,7 +30,7 @@
               <span class="fa fa-star{% if favorite.0.average_rating < 5 %}-o {% endif %}"></span>
             </h4>
             {% if favorite.0.image %}
-        <img src="{{ favorite.0.image.url }}" class="img-responsive" style="width:100%" alt="Image">
+        <img src="{{ favorite.0.image }}" class="img-responsive" style="width:100%" alt="Image">
         {% endif %}
         </div>
       </a>
