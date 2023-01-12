@@ -38,6 +38,10 @@ body > .container {
   animation: indicate 1s linear infinite alternate;
 }
 
+#favorites {
+  opacity:0;
+}
+
 @keyframes indicate {
   0% {
     transform: scale(1) translateY(-10%);
@@ -263,6 +267,7 @@ h2{
 
 .complete {
   background-color:  #002147;
+  color: white;
 }
 
 .column_name {
