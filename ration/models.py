@@ -29,7 +29,7 @@ class Recipe(models.Model):
     directions = models.TextField()
     cooking_minutes = models.IntegerField(validators=[MinValueValidator(0)])
     preparation_minutes = models.IntegerField(validators=[MinValueValidator(0)])
-    image = models.ImageField(null=True, blank=True, upload_to="images/")
+    image = models.CharField(null=True, blank=True, max_length=200)
     servings = models.IntegerField(validators=[MinValueValidator(1)])
     ingredient = models.ManyToManyField(Ingredient, through='Amount')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

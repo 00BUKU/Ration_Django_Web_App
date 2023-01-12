@@ -16,6 +16,8 @@
 <form action="" method="post" enctype="multipart/form-data">
 	{% csrf_token %}
 	{{ form.as_p }}
+	<input type="file" name="photo-file">
+	<br />
 	<div class="d-flex justify-content-around align-items-start p-2 table-sm" cellspacing="0">
 		<table id="ingredient-list" class="table">
 			<colgroup>
