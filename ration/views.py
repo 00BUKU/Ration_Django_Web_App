@@ -174,19 +174,23 @@ def recipe_update(request, recipe_id):
   context = {'recipe': recipe, 'form': form, 'ingredients': ingredients, 'ingredient_list': ingredient_list, 'SIZES':SIZES }
   return render(request, 'recipes/create.html', context)
 
+@login_required
 def delete_recipe(request, recipe_id):
   recipe=Recipe.objects.get(id=recipe_id)
-  if recipe.user_id == request.user.id:
-    recipe.delete()
-  return redirect('index')
-
+  if request.method == 'POST':
+    if recipe.user_id == request.user.id:
+      recipe.delete()
+      return redirect('index')
+  return render(request, 'recipes/confirm_delete.html', {'recipe': recipe})
 
 @login_required
 def add_review(request, recipe_id):
   form = ReviewForm(request.POST)
 
   if form.is_valid():
-    new_review = form.save(commit=False)
+    new_review = Review()
+    for key, value in form.cleaned_data.items():
+      setattr(new_review, key, value)
     new_review.user_id = request.user.id
     new_review.recipe_id = recipe_id
     new_review.save()
