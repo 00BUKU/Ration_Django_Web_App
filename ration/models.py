@@ -4,7 +4,6 @@ from datetime import date
 from django.urls import reverse 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 import operator
 import datetime
