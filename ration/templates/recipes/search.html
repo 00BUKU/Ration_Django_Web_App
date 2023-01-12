@@ -3,17 +3,12 @@
 
 {% block content %}
    {% if searched %}
-
+    <br />
     <h3>You searched for "{{ searched }}".</h3>
     <br />
         {% for recipe in recipes %}
         <div class="card text-sm-left shadow p-3 ">
             <a href="{% url 'detail' recipe.id %}" class="stretched-link">
-
-            {% if recipe.image %}
-                <img class="float-left img-thumbnail mr-4" src="{{ recipe.image.url }}" alt="Image" width="13%">
-            {% endif %}
-
                 </a>
             <div class="card-body">
             <h4 class="card-title">{{ recipe }}</h4>
