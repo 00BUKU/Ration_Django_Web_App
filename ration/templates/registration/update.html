@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Update Information</h1>
+<div id="update-info-form">
+  <div class="shadow p-3 mb-5 bg-white rounded">
+    <h3>Update Information</h3>
 
-{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+    {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
 
-<!-- Add the login form -->
-<form method="post" enctype="multipart/form-data" action="" %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="file" name="photo-file">
-  <br>
-  <br>
+    <!-- Add the login form -->
+      <form method="post" enctype="multipart/form-data" action="" %}">
+     {% csrf_token %}
+      {{ form.as_p }}
+      <input type="file" name="photo-file">
+      <br><br>
   <input type="submit" class="btn btn-light" value="Update Profile">
 </form>
 

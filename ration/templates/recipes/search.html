@@ -3,28 +3,29 @@
 
 {% block content %}
    {% if searched %}
-    <h1>You searched for "{{ searched }}".</h1>
+
+    <h3>You searched for "{{ searched }}".</h3>
     <br />
         {% for recipe in recipes %}
-        <div class="card">
+        <div class="card text-sm-left shadow p-3 ">
             <a href="{% url 'detail' recipe.id %}" class="stretched-link">
             {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="recipe image cap" class="card-img-top">
+                <img class="float-left img-thumbnail mr-4" src="{{ recipe.image.url }}" alt="Image" width="13%">
             {% endif %}
                 </a>
             <div class="card-body">
-            <h2 class="card-title">{{ recipe }}</h2>
-            <h4 class="card-subtitle"><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
+            <h4 class="card-title">{{ recipe }}</h4>
+            <h5 class="card-subtitle"><span class="fa fa-star{% if recipe.average_rating < 1 %}-o {% endif %}"></span>
                 <span class="fa fa-star{% if recipe.average_rating < 2 %}-o {% endif %}"></span>
                 <span class="fa fa-star{% if recipe.average_rating < 3 %}-o {% endif %}"></span>
                 <span class="fa fa-star{% if recipe.average_rating < 4 %}-o {% endif %}" ></span>
-                <span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h4>
+                <span class="fa fa-star{% if recipe.average_rating < 5 %}-o {% endif %}"></span></h5>
             <p class="card-text">{{ recipe.summary }}</p>
             </div>
         </div>
         {% endfor %}
     {% else %}
-    <h1>You forgot to enter a search form.</h1>
+    <h4>You forgot to enter a search form.</h4>
    {% endif %}
     
    
